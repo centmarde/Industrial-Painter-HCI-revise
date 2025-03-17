@@ -20,6 +20,14 @@ import {
   Person,
   CheckCircleOutline
 } from '@mui/icons-material';
+import { 
+  validateEmail, 
+  validateName, 
+  validateStrongPassword, 
+  validatePasswordsMatch, 
+  validateTermsAccepted,
+  getPasswordStrength 
+} from '../utils/Validator';
 
 const AnimatedButton = styled(Button)(({ theme }) => ({
   marginTop: theme.spacing(2),
@@ -117,6 +125,32 @@ const RegisterForm = () => {
     }
   };
 
+  const handleBlur = (name: string) => {
+    let error = '';
+    
+    switch (name) {
+      case 'name':
+        error = validateName(formData.name);
+        break;
+      case 'email':
+        error = validateEmail(formData.email);
+        break;
+      case 'password':
+        error = validateStrongPassword(formData.password);
+        if (!error && formData.confirmPassword) {
+          // Also validate confirm password if it exists
+          const confirmError = validatePasswordsMatch(formData.password, formData.confirmPassword);
+          setErrors(prev => ({ ...prev, confirmPassword: confirmError }));
+        }
+        break;
+      case 'confirmPassword':
+        error = validatePasswordsMatch(formData.password, formData.confirmPassword);
+        break;
+    }
+    
+    setErrors(prev => ({ ...prev, [name]: error }));
+  };
+
   const validateForm = () => {
     const newErrors = { 
       name: '', 
@@ -127,45 +161,34 @@ const RegisterForm = () => {
     };
     let isValid = true;
     
-    // Name validation
-    if (!formData.name.trim()) {
-      newErrors.name = 'Name is required';
+    const nameError = validateName(formData.name);
+    const emailError = validateEmail(formData.email);
+    const passwordError = validateStrongPassword(formData.password);
+    const confirmPasswordError = validatePasswordsMatch(formData.password, formData.confirmPassword);
+    const termsError = validateTermsAccepted(formData.agreeToTerms);
+    
+    if (nameError) {
+      newErrors.name = nameError;
       isValid = false;
     }
     
-    // Email validation
-    if (!formData.email) {
-      newErrors.email = 'Email is required';
-      isValid = false;
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Email is invalid';
+    if (emailError) {
+      newErrors.email = emailError;
       isValid = false;
     }
     
-    // Password validation
-    if (!formData.password) {
-      newErrors.password = 'Password is required';
-      isValid = false;
-    } else if (formData.password.length < 8) {
-      newErrors.password = 'Password must be at least 8 characters';
-      isValid = false;
-    } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(formData.password)) {
-      newErrors.password = 'Password must include uppercase, lowercase and numbers';
+    if (passwordError) {
+      newErrors.password = passwordError;
       isValid = false;
     }
     
-    // Confirm password validation
-    if (!formData.confirmPassword) {
-      newErrors.confirmPassword = 'Please confirm your password';
-      isValid = false;
-    } else if (formData.confirmPassword !== formData.password) {
-      newErrors.confirmPassword = 'Passwords do not match';
+    if (confirmPasswordError) {
+      newErrors.confirmPassword = confirmPasswordError;
       isValid = false;
     }
     
-    // Terms agreement
-    if (!formData.agreeToTerms) {
-      newErrors.agreeToTerms = 'You must agree to the terms and conditions';
+    if (termsError) {
+      newErrors.agreeToTerms = termsError;
       isValid = false;
     }
     
@@ -192,22 +215,7 @@ const RegisterForm = () => {
     }
   };
 
-  const getPasswordStrength = () => {
-    const { password } = formData;
-    if (!password) return { strength: 0, text: '', color: 'grey.500' };
-    
-    if (password.length < 6) {
-      return { strength: 1, text: 'Weak', color: 'error.main' };
-    } else if (password.length < 10) {
-      return { strength: 2, text: 'Moderate', color: 'warning.main' };
-    } else if (/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(password)) {
-      return { strength: 3, text: 'Strong', color: 'success.main' };
-    } else {
-      return { strength: 2, text: 'Moderate', color: 'warning.main' };
-    }
-  };
-
-  const passwordStrength = getPasswordStrength();
+  const passwordStrength = getPasswordStrength(formData.password);
 
   if (registrationSuccess) {
     return (
@@ -240,6 +248,7 @@ const RegisterForm = () => {
         variant="outlined"
         value={formData.name}
         onChange={handleChange}
+        onBlur={() => handleBlur('name')}
         error={!!errors.name}
         helperText={errors.name}
         InputProps={{
@@ -260,6 +269,7 @@ const RegisterForm = () => {
         autoComplete="email"
         value={formData.email}
         onChange={handleChange}
+        onBlur={() => handleBlur('email')}
         error={!!errors.email}
         helperText={errors.email}
         InputProps={{
@@ -280,6 +290,7 @@ const RegisterForm = () => {
         variant="outlined"
         value={formData.password}
         onChange={handleChange}
+        onBlur={() => handleBlur('password')}
         error={!!errors.password}
         helperText={errors.password}
         InputProps={{
@@ -340,6 +351,7 @@ const RegisterForm = () => {
         variant="outlined"
         value={formData.confirmPassword}
         onChange={handleChange}
+        onBlur={() => handleBlur('confirmPassword')}
         error={!!errors.confirmPassword}
         helperText={errors.confirmPassword}
         InputProps={{
