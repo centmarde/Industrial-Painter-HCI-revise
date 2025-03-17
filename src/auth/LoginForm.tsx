@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { Visibility, VisibilityOff, Email, Lock } from '@mui/icons-material';
+import { validateEmail, validateStrongPassword } from '../utils/Validator';
 
 const AnimatedButton = styled(Button)(({ theme }) => ({
   marginTop: theme.spacing(2),
@@ -19,6 +20,10 @@ const AnimatedButton = styled(Button)(({ theme }) => ({
   transition: 'all 0.3s ease',
   position: 'relative',
   overflow: 'hidden',
+  backgroundColor: theme.custom.darkest,
+  '&:hover': {
+    backgroundColor: theme.palette.primary.dark,
+  },
   '&:before': {
     content: '""',
     position: 'absolute',
@@ -80,23 +85,35 @@ const LoginForm = () => {
     }
   };
 
+  const handleBlur = (name: string) => {
+    let error = '';
+    
+    switch (name) {
+      case 'email':
+        error = validateEmail(formData.email);
+        break;
+      case 'password':
+        error = validateStrongPassword(formData.password);
+        break;
+    }
+    
+    setErrors(prev => ({ ...prev, [name]: error }));
+  };
+
   const validateForm = () => {
     const newErrors = { email: '', password: '' };
     let isValid = true;
     
-    if (!formData.email) {
-      newErrors.email = 'Email is required';
-      isValid = false;
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Email is invalid';
+    const emailError = validateEmail(formData.email);
+    const passwordError = validateStrongPassword(formData.password);
+    
+    if (emailError) {
+      newErrors.email = emailError;
       isValid = false;
     }
     
-    if (!formData.password) {
-      newErrors.password = 'Password is required';
-      isValid = false;
-    } else if (formData.password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters';
+    if (passwordError) {
+      newErrors.password = passwordError;
       isValid = false;
     }
     
@@ -134,6 +151,7 @@ const LoginForm = () => {
         autoComplete="email"
         value={formData.email}
         onChange={handleChange}
+        onBlur={() => handleBlur('email')}
         error={!!errors.email}
         helperText={errors.email}
         InputProps={{
@@ -155,6 +173,7 @@ const LoginForm = () => {
         autoComplete="current-password"
         value={formData.password}
         onChange={handleChange}
+        onBlur={() => handleBlur('password')}
         error={!!errors.password}
         helperText={errors.password}
         InputProps={{
