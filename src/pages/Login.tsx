@@ -3,14 +3,17 @@ import { Box, Container, Paper, Tab, Tabs, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import LoginForm from '../auth/LoginForm';
 import RegisterForm from '../auth/RegisterForm';
+import DarkModeToggle from '../components/DarkModeToggle';
 
 // Styled components for enhanced visual appeal
 const StyledContainer = styled(Container)(({ theme }) => ({
   display: 'flex',
-  justifyContent: 'center',
+  justifyContent: 'space-between',
   alignItems: 'center',
   minHeight: '100vh',
-  background: `linear-gradient(135deg, ${theme.palette.primary.dark} 0%, ${theme.palette.secondary.dark} 100%)`,
+  background: theme.palette.mode === 'light' 
+    ? `linear-gradient(135deg, ${theme.custom.darkest} 0%, ${theme.custom.light} 100%)`
+    : `linear-gradient(135deg, #202020 0%, #121212 100%)`,
 }));
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
@@ -21,6 +24,7 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   maxWidth: 500,
   overflow: 'hidden',
   position: 'relative',
+  backgroundColor: theme.custom.lighter,
   '&::before': {
     content: '""',
     position: 'absolute',
@@ -28,7 +32,7 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
     left: 0,
     right: 0,
     height: '4px',
-    background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+    background: `linear-gradient(90deg, ${theme.custom.darkest}, ${theme.custom.light})`,
   },
   animation: 'fadeIn 0.6s ease-out',
   '@keyframes fadeIn': {
@@ -42,6 +46,14 @@ const StyledTabs = styled(Tabs)(({ theme }) => ({
   '& .MuiTabs-indicator': {
     height: 3,
     borderRadius: '3px',
+    backgroundColor: theme.custom.darkest,
+  },
+  '& .MuiTab-root': {
+    color: theme.palette.text.secondary,
+    '&.Mui-selected': {
+      color: theme.custom.darkest,
+      fontWeight: 600,
+    },
   },
 }));
 
@@ -54,25 +66,50 @@ const Login = () => {
 
   return (
     <StyledContainer maxWidth={false}>
-      <StyledPaper elevation={6}>
-        <Typography variant="h4" align="center" gutterBottom sx={{ fontWeight: 700 }}>
-          Industrial Painter
-        </Typography>
-        
-        <StyledTabs
-          value={tabValue}
-          onChange={handleTabChange}
-          variant="fullWidth"
-          aria-label="login register tabs"
-        >
-          <Tab label="Login" />
-          <Tab label="Register" />
-        </StyledTabs>
-        
-        <Box sx={{ mt: 2 }}>
-          {tabValue === 0 ? <LoginForm /> : <RegisterForm />}
-        </Box>
-      </StyledPaper>
+      {/* Left side blank container */}
+      <Box sx={{ 
+        flex: 1, 
+        height: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}>
+        {/* This container is intentionally left blank */}
+      </Box>
+      
+      {/* Right side login/register panel */}
+      <Box sx={{ 
+        flex: 1,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 2
+      }}>
+        <StyledPaper elevation={6}>
+          <DarkModeToggle />
+          
+          <Typography variant="h4" align="center" gutterBottom sx={{ 
+            fontWeight: 700,
+            color: (theme) => theme.custom.darkest 
+          }}>
+            Industrial Painter
+          </Typography>
+          
+          <StyledTabs
+            value={tabValue}
+            onChange={handleTabChange}
+            variant="fullWidth"
+            aria-label="login register tabs"
+          >
+            <Tab label="Login" />
+            <Tab label="Register" />
+          </StyledTabs>
+          
+          <Box sx={{ mt: 2 }}>
+            {tabValue === 0 ? <LoginForm /> : <RegisterForm />}
+          </Box>
+        </StyledPaper>
+      </Box>
     </StyledContainer>
   );
 };
