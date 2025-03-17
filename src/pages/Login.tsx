@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Box, Container, Paper, Tab, Tabs, Typography } from '@mui/material';
+import { Box, Container, Grid, Paper, Tab, Tabs, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import LoginForm from '../auth/LoginForm';
 import RegisterForm from '../auth/RegisterForm';
@@ -12,7 +12,7 @@ const StyledContainer = styled(Container)(({ theme }) => ({
   alignItems: 'center',
   minHeight: '100vh',
   background: theme.palette.mode === 'light' 
-    ? `linear-gradient(135deg, ${theme.custom.darkest} 0%, ${theme.custom.light} 100%)`
+    ? `linear-gradient(135deg, ${theme.custom.lighter} 0%, ${theme.custom.darkest} 100%)`
     : `linear-gradient(135deg, #202020 0%, #121212 100%)`,
 }));
 
@@ -66,50 +66,52 @@ const Login = () => {
 
   return (
     <StyledContainer maxWidth={false}>
-      {/* Left side blank container */}
-      <Box sx={{ 
-        flex: 1, 
-        height: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center'
-      }}>
-        {/* This container is intentionally left blank */}
-      </Box>
-      
-      {/* Right side login/register panel */}
-      <Box sx={{ 
-        flex: 1,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 2
-      }}>
-        <StyledPaper elevation={6}>
-          <DarkModeToggle />
-          
-          <Typography variant="h4" align="center" gutterBottom sx={{ 
-            fontWeight: 700,
-            color: (theme) => theme.custom.darkest 
+      <Grid container sx={{ minHeight: '100vh' }}>
+        {/* Left side container - hidden on small screens */}
+        <Grid item xs={0} md={6} lg={7} sx={{ 
+          display: { xs: 'none', md: 'flex' },
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}>
+          {/* This container is intentionally left blank */}
+        </Grid>
+        
+        {/* Right side login/register panel - full width on small screens */}
+        <Grid item xs={12} md={6} lg={5} sx={{ 
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          padding: { xs: 2, sm: 3, md: 4 }
+        }}>
+          <StyledPaper elevation={6} sx={{ 
+            maxWidth: { xs: '100%', sm: 450, md: 500 },
+            width: '100%'
           }}>
-            Industrial Painter
-          </Typography>
-          
-          <StyledTabs
-            value={tabValue}
-            onChange={handleTabChange}
-            variant="fullWidth"
-            aria-label="login register tabs"
-          >
-            <Tab label="Login" />
-            <Tab label="Register" />
-          </StyledTabs>
-          
-          <Box sx={{ mt: 2 }}>
-            {tabValue === 0 ? <LoginForm /> : <RegisterForm />}
-          </Box>
-        </StyledPaper>
-      </Box>
+            <DarkModeToggle />
+            
+            <Typography variant="h4" align="center" gutterBottom sx={{ 
+              fontWeight: 700,
+              color: (theme) => theme.custom.darkest 
+            }}>
+              Industrial Painter
+            </Typography>
+            
+            <StyledTabs
+              value={tabValue}
+              onChange={handleTabChange}
+              variant="fullWidth"
+              aria-label="login register tabs"
+            >
+              <Tab label="Login" />
+              <Tab label="Register" />
+            </StyledTabs>
+            
+            <Box sx={{ mt: 2 }}>
+              {tabValue === 0 ? <LoginForm /> : <RegisterForm />}
+            </Box>
+          </StyledPaper>
+        </Grid>
+      </Grid>
     </StyledContainer>
   );
 };

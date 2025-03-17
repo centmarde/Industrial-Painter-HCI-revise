@@ -13,6 +13,7 @@ import {
 import { styled } from '@mui/material/styles';
 import { Visibility, VisibilityOff, Email, Lock } from '@mui/icons-material';
 import { validateEmail, validateStrongPassword } from '../utils/Validator';
+import Oauth from '../common/Oauth';
 
 const AnimatedButton = styled(Button)(({ theme }) => ({
   marginTop: theme.spacing(2),
@@ -229,6 +230,8 @@ const LoginForm = () => {
       >
         {isLoading ? <CircularProgress size={24} color="inherit" /> : 'Login'}
       </AnimatedButton>
+      
+      <Oauth />
     </Box>
   );
 };
