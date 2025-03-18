@@ -10,6 +10,8 @@ A professional painting services management application built with modern web te
   <img src="https://img.shields.io/badge/Vite-B73BFE?style=for-the-badge&logo=vite&logoColor=FFD62E" alt="Vite" />
   <img src="https://img.shields.io/badge/Material%20UI-007FFF?style=for-the-badge&logo=mui&logoColor=white" alt="Material UI" />
   <img src="https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white" alt="React Router" />
+  <img src="https://img.shields.io/badge/Styled_Components-DB7093?style=for-the-badge&logo=styled-components&logoColor=white" alt="Styled Components" />
+  <img src="https://img.shields.io/badge/FortAwesome-528DD7?style=for-the-badge&logo=font-awesome&logoColor=white" alt="Font Awesome" />
 </div>
 
 - **React** - UI library for building component-based interfaces
@@ -17,6 +19,8 @@ A professional painting services management application built with modern web te
 - **Vite** - Next generation frontend tooling for fast development
 - **Material UI** - React component library implementing Google's Material Design
 - **React Router** - Declarative routing for React applications
+- **Styled Components** - Visual primitives for the component age
+- **Font Awesome** - Scalable vector icons that can be customized
 
 ## Features
 
@@ -24,7 +28,6 @@ A professional painting services management application built with modern web te
 - Responsive design works on desktop and mobile devices
 - Form validation with immediate feedback
 - Modern UI with smooth animations and transitions
-
 
 ## Development
 
