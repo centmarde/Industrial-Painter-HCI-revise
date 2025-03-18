@@ -12,67 +12,143 @@ import {
   ListItem,
   ListItemText,
   Tabs,
-  Tab
+  Divider,
+  Typography
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
 import { Link } from 'react-router-dom';
-import Logo from './Logo';
+import Logo from '../common/Logo';
 import DarkModeToggle from './DarkModeToggle';
+import SubmenuDropdown, { SubMenuItem } from '../common/SubmenuDropdown';
 
 interface NavItem {
   label: string;
   path: string;
+  children?: SubMenuItem[];
 }
 
 const navItems: NavItem[] = [
-  { label: 'Residential Painting', path: '/residential' },
-  { label: 'Commercial Painting', path: '/commercial' },
+  { 
+    label: 'Residential Painting', 
+    path: '/residential',
+    children: [
+      { label: 'Exterior Painting', path: '/residential/exterior' },
+      { label: 'Interior Painting', path: '/residential/interior' },
+      { label: 'Services', path: '/residential/services' },
+    ]
+  },
+  { 
+    label: 'Commercial Painting', 
+    path: '/commercial',
+    children: [
+      { label: 'Services', path: '/commercial/services' },
+      { label: 'National Account', path: '/commercial/national-account' },
+      { label: 'Case Studies', path: '/commercial/case-studies' },
+    ]
+  },
   { label: 'Reviews', path: '/reviews' },
-  { label: 'About Us', path: '/about' },
+  { 
+    label: 'About Us', 
+    path: '/about',
+    children: [
+      { label: 'Why Choose Us?', path: '/about/why-choose-us' },
+      { label: 'Social Purpose', path: '/about/social-purpose' },
+      { label: 'Painting Blog', path: '/about/blog' },
+      { label: 'Diversity & Inclusion', path: '/about/diversity' },
+    ]
+  },
   { label: 'Find a Location', path: '/locations' },
-  { label: 'Own a Franchise', path: '/franchise' },
-  { label: 'Careers', path: '/careers' },
+  { 
+    label: 'Own a Franchise', 
+    path: '/franchise',
+    children: [
+      { label: 'Our Story', path: '/franchise/our-story' },
+      { label: 'Why Franchise', path: '/franchise/why-franchise' },
+      { label: 'The Process', path: '/franchise/process' },
+      { label: 'Investment', path: '/franchise/investment' },
+      { label: 'Available Markets', path: '/franchise/markets' },
+    ]
+  },
+  { 
+    label: 'Careers', 
+    path: '/careers',
+    children: [
+      { label: 'Positions Near You', path: '/careers/positions' },
+      { label: 'Work With Corporate', path: '/careers/corporate' },
+    ]
+  },
+  { label: 'login', path: '/login' },
 ];
 
 const OutsideNavbar: React.FC = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('lg'));
+  const isSmallMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState(0);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
-  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
-    setActiveTab(newValue);
-  };
-
   const drawer = (
-    <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center', p: 2 }}>
+    <Box sx={{ textAlign: 'center', p: 2, height: '100%', display: 'flex', flexDirection: 'column' }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
         <Logo size="small" />
         <IconButton edge="end" color="inherit" aria-label="close" onClick={handleDrawerToggle}>
           <CloseIcon />
         </IconButton>
       </Box>
-      <List>
+      <Divider sx={{ mb: 2 }} />
+      
+      <List sx={{ flexGrow: 1 }}>
         {navItems.map((item) => (
           <ListItem 
             key={item.label} 
-            component={Link} 
-            to={item.path} 
             sx={{ 
               textAlign: 'center',
               color: theme.palette.text.primary,
               textDecoration: 'none',
-              py: 1
+              py: 1,
+              flexDirection: 'column'
             }}
           >
-            <ListItemText primary={item.label} />
+            <SubmenuDropdown
+              label={item.label}
+              path={item.path}
+              children={item.children}
+              onClose={handleDrawerToggle}
+            />
           </ListItem>
         ))}
+        
+        {/* Dark Mode Toggle as a list item */}
+        <ListItem 
+          sx={{ 
+            textAlign: 'center',
+            py: 1,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}
+        >
+          <Box sx={{ 
+            display: 'flex', 
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 1
+          }}>
+            <DarkModeIcon fontSize="small" />
+            <Typography
+              variant={isSmallMobile ? "body2" : "body1"}
+              sx={{ fontWeight: 500 }}
+            >
+              Theme
+            </Typography>
+            <DarkModeToggle />
+          </Box>
+        </ListItem>
       </List>
     </Box>
   );
@@ -99,52 +175,62 @@ const OutsideNavbar: React.FC = () => {
 
             {/* Navigation for desktop */}
             {!isMobile ? (
-              <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1, justifyContent: 'center' }}>
-                <Tabs 
-                  value={activeTab} 
-                  onChange={handleTabChange} 
-                  variant="scrollable"
-                  scrollButtons="auto"
-                  sx={{ 
-                    '& .MuiTab-root': { 
-                      textTransform: 'none', 
-                      fontSize: '0.9rem',
-                      minWidth: 'auto',
-                      px: 2
-                    }
-                  }}
-                >
-                  {navItems.map((item, index) => (
-                    <Tab 
+              <Box sx={{ 
+                display: 'flex', 
+                alignItems: 'center',
+                justifyContent: 'flex-end',
+                flexGrow: 1,
+                pr: 8 // Add padding-right to give space for the absolute-positioned toggle
+              }}>
+                <Box sx={{ 
+                  display: 'flex', 
+                  height: '64px', 
+                  alignItems: 'center',
+                  '& > *': {
+                    height: '100%'
+                  }
+                }}>
+                  {navItems.map((item) => (
+                    <SubmenuDropdown 
                       key={item.label} 
                       label={item.label} 
-                      component={Link}
-                      to={item.path}
+                      path={item.path}
+                      children={item.children}
+                      isTabItem
                     />
                   ))}
-                </Tabs>
+                </Box>
               </Box>
-            ) : null}
+            ) : (
+              <Box sx={{ flexGrow: 1 }} />
+            )}
 
-            {/* Actions section (right side) */}
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              {/* Dark Mode Toggle */}
-              <DarkModeToggle />
-              
-              {/* Mobile menu button */}
-              {isMobile && (
-                <IconButton
-                  color="inherit"
-                  aria-label="open drawer"
-                  edge="end"
-                  onClick={handleDrawerToggle}
-                  sx={{ ml: 1 }}
-                >
-                  <MenuIcon />
-                </IconButton>
-              )}
-            </Box>
+            {/* Mobile menu button (right aligned) */}
+            {isMobile && (
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                edge="end"
+                onClick={handleDrawerToggle}
+              >
+                <MenuIcon />
+              </IconButton>
+            )}
           </Toolbar>
+          
+          {/* Dark Mode Toggle with absolute positioning - desktop only */}
+          {!isMobile && (
+            <Box
+              sx={{
+                position: 'absolute',
+                top: theme.spacing(2),
+                right: theme.spacing(3),
+                zIndex: theme.zIndex.drawer + 2
+              }}
+            >
+              <DarkModeToggle />
+            </Box>
+          )}
         </Container>
       </AppBar>
 

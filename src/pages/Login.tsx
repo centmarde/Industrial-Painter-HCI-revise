@@ -4,7 +4,7 @@ import { styled } from '@mui/material/styles';
 import LoginForm from '../auth/LoginForm';
 import RegisterForm from '../auth/RegisterForm';
 import DarkModeToggle from '../components/DarkModeToggle';
-import Logo from '../components/Logo';
+import Logo from '../common/Logo';
 import happinessGif from '../assets/images/Paint.png';
 
 // Styled components for enhanced visual appeal
@@ -80,6 +80,16 @@ const Login = () => {
         </Box>
       )}
       
+      {/* DarkModeToggle in the top right corner */}
+      <Box sx={{ 
+        position: 'absolute', 
+        top: 16, 
+        right: 16,
+        zIndex: 1
+      }}>
+        <DarkModeToggle />
+      </Box>
+      
       <Grid container sx={{ minHeight: '100vh' }}>
         {/* Left side container - hidden on small screens */}
         <Grid item xs={0} md={6} lg={7} sx={{ 
@@ -115,8 +125,6 @@ const Login = () => {
             maxWidth: { xs: '100%', sm: 450, md: 500 },
             width: '100%'
           }}>
-            <DarkModeToggle />
-            
             <Typography variant="h4" align="center" gutterBottom sx={{ 
               fontWeight: 700,
               color: (theme) => theme.custom.darkest 
