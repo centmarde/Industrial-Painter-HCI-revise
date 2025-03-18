@@ -26,14 +26,14 @@ export const createAppTheme = (mode: PaletteMode) => createTheme({
   palette: {
     mode,
     primary: {
-      main: '#BDB395',
-      dark: '#A9A082',
-      light: '#D5C7A3',
+      main: '#FB8500',
+      dark: '#E07700',
+      light: '#FF9D33',
     },
     secondary: {
-      main: '#F2E2B1',
-      dark: '#D5C7A3',
-      light: '#F6F0F0',
+      main: '#FFB703',
+      dark: '#E6A403',
+      light: '#FFC433',
     },
     background: {
       default: mode === 'light' ? '#F6F0F0' : '#121212',
@@ -73,9 +73,9 @@ export const createAppTheme = (mode: PaletteMode) => createTheme({
     borderRadius: 8,
   },
   custom: {
-    darkest: '#BDB395',
-    darker: '#D5C7A3',
-    light: '#F2E2B1',
+    darkest: '#FB8500',
+    darker: '#FF9D33',
+    light: '#FFB703',
     lighter: mode === 'light' ? '#F6F0F0' : '#1E1E1E',
   },
   components: {
@@ -89,9 +89,9 @@ export const createAppTheme = (mode: PaletteMode) => createTheme({
           },
         },
         contained: {
-          backgroundColor: '#BDB395',
+          backgroundColor: '#FB8500',
           '&:hover': {
-            backgroundColor: '#A9A082',
+            backgroundColor: '#E07700',
           },
         },
       },
@@ -101,15 +101,15 @@ export const createAppTheme = (mode: PaletteMode) => createTheme({
         root: {
           '& .MuiOutlinedInput-root': {
             '&:hover fieldset': {
-              borderColor: '#BDB395',
+              borderColor: '#FB8500',
             },
             '&.Mui-focused fieldset': {
-              borderColor: '#BDB395',
+              borderColor: '#FB8500',
               borderWidth: 2,
             },
           },
           '& .MuiInputLabel-root.Mui-focused': {
-            color: '#BDB395',
+            color: '#FB8500',
           },
         },
       },
@@ -117,9 +117,9 @@ export const createAppTheme = (mode: PaletteMode) => createTheme({
     MuiCheckbox: {
       styleOverrides: {
         root: {
-          color: '#BDB395',
+          color: '#FB8500',
           '&.Mui-checked': {
-            color: '#BDB395',
+            color: '#FB8500',
           },
         },
       },
@@ -127,7 +127,7 @@ export const createAppTheme = (mode: PaletteMode) => createTheme({
   },
 });
 
-// Default theme is light mode
-const theme = createAppTheme('light');
+// Default theme is dark mode instead of light mode
+const theme = createAppTheme('dark');
 
 export default theme;

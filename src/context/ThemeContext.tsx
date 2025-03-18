@@ -9,7 +9,7 @@ type ThemeContextType = {
 };
 
 const ThemeContext = createContext<ThemeContextType>({
-  mode: 'light',
+  mode: 'dark', // Set default to dark
   toggleTheme: () => {},
 });
 
@@ -20,11 +20,8 @@ type ThemeProviderProps = {
 };
 
 export const ThemeProvider = ({ children }: ThemeProviderProps) => {
-  // Try to get stored theme preference or use light as default
-  const [mode, setMode] = useState<PaletteMode>(() => {
-    const savedMode = localStorage.getItem('themeMode');
-    return (savedMode as PaletteMode) || 'light';
-  });
+  // Initialize with dark mode
+  const [mode, setMode] = useState<PaletteMode>('dark');
 
   // Generate the theme based on current mode
   const theme = React.useMemo(() => createAppTheme(mode), [mode]);
