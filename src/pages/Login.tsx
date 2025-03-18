@@ -97,19 +97,14 @@ const Login = () => {
           alignItems: 'center',
           justifyContent: 'center'
         }}>
-          <Box
-            component="img"
+          <img
             src={happinessGif}
             alt="Industrial Painter"
-            sx={{
+            style={{
               maxWidth: '60%',
               maxHeight: '600%',
               objectFit: 'contain',
               animation: 'fadeIn 1s ease-out',
-              '@keyframes fadeIn': {
-                from: { opacity: 0, transform: 'scale(0.95)' },
-                to: { opacity: 1, transform: 'scale(1)' }
-              },
             }}
           />
         </Grid>
@@ -127,7 +122,7 @@ const Login = () => {
           }}>
             <Typography variant="h4" align="center" gutterBottom sx={{ 
               fontWeight: 700,
-              color: (theme) => theme.custom.darkest 
+              color: (theme: any) => theme.custom.darkest 
             }}>
               Industrial Painter
             </Typography>

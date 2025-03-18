@@ -1,10 +1,10 @@
-import React from 'react';
 import { CssBaseline } from '@mui/material';
 import { ThemeProvider } from './context/ThemeContext';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/Login';
 import Home from './pages/Home';
 import HeroLanding from './pages/index';
+import ExteriorPainting from './pages/Residential Painting/ExteriorPainting';
 // Import any other components or pages you have
 
 function App() {
@@ -21,6 +21,9 @@ function App() {
           
           {/* Home/Dashboard route */}
           <Route path="/home" element={<Home />} />
+          
+          {/* Residential Painting routes */}
+          <Route path="/residential/exterior" element={<ExteriorPainting />} />
           
           {/* Add more routes here as your application grows */}
           

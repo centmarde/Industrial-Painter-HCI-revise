@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import PhoneIcon from '@mui/icons-material/Phone';
 import OutsideLayout from '../layout/OutsideLayout';
 import happinessGif from '../assets/images/Paint.png';
+import AnnouncementBanner from '../common/AnnouncementBanner';
 
 const HeroSection = styled(Box)(({ theme }) => ({
   minHeight: '100vh',
@@ -37,6 +38,7 @@ const HeroLanding = () => {
 
   return (
     <OutsideLayout>
+      <AnnouncementBanner />
       <HeroSection>
         <Container maxWidth="xl" sx={{ mt: 1 }}>
           <Grid container spacing={4} 
@@ -166,9 +168,6 @@ const HeroLanding = () => {
             {/* Hero Image */}
             <Grid item xs={12} md={6} sx={{ order: { xs: 1, md: 2 }, textAlign: 'end' }}>
               <Box
-                component="img"
-                src={happinessGif}
-                alt="Industrial Painter"
                 sx={{
                   maxWidth: '100%',
                   height: 'auto',
@@ -181,7 +180,18 @@ const HeroLanding = () => {
                     '100%': { transform: 'translateY(0px)' }
                   },
                 }}
-              />
+              >
+                <img
+                  src={happinessGif}
+                  alt="Industrial Painter"
+                  style={{
+                    maxWidth: '100%',
+                    height: 'auto',
+                    maxHeight: '500px',
+                    objectFit: 'contain',
+                  }}
+                />
+              </Box>
             </Grid>
           </Grid>
         </Container>
