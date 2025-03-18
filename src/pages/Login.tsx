@@ -76,7 +76,7 @@ const Login = () => {
           left: 16,
           zIndex: 1
         }}>
-          <Logo size="small" />
+          <Logo />
         </Box>
       )}
       

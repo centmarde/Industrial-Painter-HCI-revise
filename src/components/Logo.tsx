@@ -26,9 +26,9 @@ const StylizedText = styled(Typography)(({ theme }) => ({
 const Logo: React.FC<LogoProps> = ({ size = 'medium', showText = true }) => {
   const getSize = () => {
     switch(size) {
-      case 'small': return { imgSize: 75, fontSize: '1rem' };
+      case 'small': return { imgSize: 30, fontSize: '0.5rem' };
       case 'large': return { imgSize: 100, fontSize: '3.2rem' };
-      default: return { imgSize: 50, fontSize: '1.8rem' };
+      default: return { imgSize: 50, fontSize: '1rem' };
     }
   };
   
