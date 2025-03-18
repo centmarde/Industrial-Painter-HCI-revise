@@ -139,13 +139,6 @@ const OutsideNavbar: React.FC = () => {
             justifyContent: 'center',
             gap: 1
           }}>
-            <DarkModeIcon fontSize="small" />
-            <Typography
-              variant={isSmallMobile ? "body2" : "body1"}
-              sx={{ fontWeight: 500 }}
-            >
-              Theme
-            </Typography>
             <DarkModeToggle />
           </Box>
         </ListItem>
