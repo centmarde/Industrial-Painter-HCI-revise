@@ -1,4 +1,5 @@
 # Industrial Painter
+![image](https://github.com/user-attachments/assets/4a5345dd-4a52-44f4-bb3e-fbd6ea3ae31d)
 
 A professional painting services management application built with modern web technologies.
 
