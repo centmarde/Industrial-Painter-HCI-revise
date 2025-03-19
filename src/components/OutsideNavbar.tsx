@@ -36,14 +36,14 @@ const navItems: NavItem[] = [
     children: [
       { label: 'Exterior Painting', path: '/residential/exterior' },
       { label: 'Interior Painting', path: '/residential/interior' },
-      { label: 'Services', path: '/residential/services' },
+      { label: 'Services', path: '/services' },
     ]
   },
   { 
     label: 'Commercial Painting', 
     path: '/commercial',
     children: [
-      { label: 'Services', path: '/commercial/services' },
+      { label: 'Services', path: '/services' },
       { label: 'National Account', path: '/commercial/national-account' },
       { label: 'Case Studies', path: '/commercial/case-studies' },
     ]

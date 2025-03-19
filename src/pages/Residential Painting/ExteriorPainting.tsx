@@ -14,6 +14,8 @@ import {
   useTheme
 } from '@mui/material';
 import './ExteriorPainting.css';
+import Icon from '@mui/material/Icon';
+import CTASection from '../../common/CTASection';
 
 const ExteriorPainting: React.FC = () => {
     const { mode } = useThemeContext();
@@ -63,12 +65,6 @@ const ExteriorPainting: React.FC = () => {
         lineHeight: 1.4
     };
 
-    // Styles for list items in cards
-    const listItemStyles = {
-        fontSize: '0.85rem',
-        lineHeight: 1.4,
-        mb: 0.5
-    };
 
     // Grid wrapper style to ensure fixed width containers
     const gridItemStyles = {
@@ -104,77 +100,77 @@ const ExteriorPainting: React.FC = () => {
             </section>
 
             <Box className="services-section py-5" sx={{ backgroundColor: isDark ? theme.palette.background.default : '#fff', py: 5 }}>
-                <Container>
-                    <Typography 
-                        variant="h3" 
-                        className="section-title text-center mb-5"
-                        sx={{ color: isDark ? '#fff' : 'inherit', textAlign: 'center', mb: 5 }}
-                    >
-                        Our Exterior Painting Services
-                    </Typography>
-                    <Grid container spacing={4}>
-                        <Grid item xs={12} md={6} lg={4} sx={gridItemStyles}>
-                            <Paper elevation={isDark ? 3 : 1} className={`service-card h-100 ${isDark ? 'dark-card' : ''}`} sx={paperStyles}>
-                                <Card sx={cardStyles}>
-                                    <CardMedia
-                                        component="img"
-                                        sx={cardMediaStyles}
-                                        image="/images/exterior/house-painting.jpg"
-                                        alt="House Painting"
-                                    />
-                                    <CardContent sx={cardContentStyles}>
-                                        <Typography variant="h5" sx={cardTitleStyles}>
-                                            Complete House Painting
-                                        </Typography>
-                                        <Typography sx={cardTextStyles}>
-                                            Full exterior painting services to revitalize your home's appearance and protect it from the elements.
-                                        </Typography>
-                                    </CardContent>
-                                </Card>
-                            </Paper>
-                        </Grid>
-                        <Grid item xs={12} md={6} lg={4} sx={gridItemStyles}>
-                            <Paper elevation={isDark ? 3 : 1} className={`service-card h-100 ${isDark ? 'dark-card' : ''}`} sx={paperStyles}>
-                                <Card sx={cardStyles}>
-                                    <CardMedia
-                                        component="img"
-                                        sx={cardMediaStyles}
-                                        image="/images/exterior/trim-painting.jpg"
-                                        alt="Trim Painting"
-                                    />
-                                    <CardContent sx={cardContentStyles}>
-                                        <Typography variant="h5" sx={cardTitleStyles}>
-                                            Trim & Detail Work
-                                        </Typography>
-                                        <Typography sx={cardTextStyles}>
-                                            Precision painting for window frames, door frames, soffits, fascia, and architectural details.
-                                        </Typography>
-                                    </CardContent>
-                                </Card>
-                            </Paper>
-                        </Grid>
-                        <Grid item xs={12} md={6} lg={4} sx={gridItemStyles}>
-                            <Paper elevation={isDark ? 3 : 1} className={`service-card h-100 ${isDark ? 'dark-card' : ''}`} sx={paperStyles}>
-                                <Card sx={cardStyles}>
-                                    <CardMedia
-                                        component="img"
-                                        sx={cardMediaStyles}
-                                        image="/images/exterior/deck-painting.jpg"
-                                        alt="Deck Staining"
-                                    />
-                                    <CardContent sx={cardContentStyles}>
-                                        <Typography variant="h5" sx={cardTitleStyles}>
-                                            Deck & Fence Staining
-                                        </Typography>
-                                        <Typography sx={cardTextStyles}>
-                                            Professional staining and sealing for decks, fences, and other outdoor wooden structures.
-                                        </Typography>
-                                    </CardContent>
-                                </Card>
-                            </Paper>
-                        </Grid>
-                    </Grid>
-                </Container>
+               <Container>
+    <Typography 
+        variant="h3" 
+        className="section-title text-center mb-5"
+        sx={{ color: isDark ? '#fff' : 'inherit', textAlign: 'center', mb: 5 }}
+    >
+        Our Exterior Painting Services
+    </Typography>
+    <Grid container spacing={4}>
+        <Grid item xs={12} md={6} lg={4} sx={gridItemStyles}>
+            <Paper elevation={isDark ? 3 : 1} className={`service-card h-100 ${isDark ? 'dark-card' : ''}`} sx={paperStyles}>
+                <Card sx={cardStyles}>
+                    <CardMedia
+                        component="img"
+                        sx={cardMediaStyles}
+                        image="/images/exteriorPainting/housepaint.jpg"
+                        alt="House Painting"
+                    />
+                    <CardContent sx={cardContentStyles}>
+                        <Typography variant="h5" sx={cardTitleStyles}>
+                            <Icon>home</Icon> Complete House Painting
+                        </Typography>
+                        <Typography sx={cardTextStyles}>
+                            Full exterior painting services to revitalize your home's appearance and protect it from the elements.
+                        </Typography>
+                    </CardContent>
+                </Card>
+            </Paper>
+        </Grid>
+        <Grid item xs={12} md={6} lg={4} sx={gridItemStyles}>
+            <Paper elevation={isDark ? 3 : 1} className={`service-card h-100 ${isDark ? 'dark-card' : ''}`} sx={paperStyles}>
+                <Card sx={cardStyles}>
+                    <CardMedia
+                        component="img"
+                        sx={cardMediaStyles}
+                        image="/images/exteriorPainting/trim.jpg"
+                        alt="Trim Painting"
+                    />
+                    <CardContent sx={cardContentStyles}>
+                        <Typography variant="h5" sx={cardTitleStyles}>
+                            <Icon>format_paint</Icon> Trim & Detail Work
+                        </Typography>
+                        <Typography sx={cardTextStyles}>
+                            Precision painting for window frames, door frames, soffits, fascia, and architectural details.
+                        </Typography>
+                    </CardContent>
+                </Card>
+            </Paper>
+        </Grid>
+        <Grid item xs={12} md={6} lg={4} sx={gridItemStyles}>
+            <Paper elevation={isDark ? 3 : 1} className={`service-card h-100 ${isDark ? 'dark-card' : ''}`} sx={paperStyles}>
+                <Card sx={cardStyles}>
+                    <CardMedia
+                        component="img"
+                        sx={cardMediaStyles}
+                        image="/images/exteriorPainting/staining.jpg"
+                        alt="Deck Staining"
+                    />
+                    <CardContent sx={cardContentStyles}>
+                        <Typography variant="h5" sx={cardTitleStyles}>
+                            <Icon>deck</Icon> Deck & Fence Staining
+                        </Typography>
+                        <Typography sx={cardTextStyles}>
+                            Professional staining and sealing for decks, fences, and other outdoor wooden structures.
+                        </Typography>
+                    </CardContent>
+                </Card>
+            </Paper>
+        </Grid>
+    </Grid>
+</Container>
             </Box>
 
             <Box className="process-section py-5" sx={{ backgroundColor: isDark ? '#1e1e1e' : '#f5f5f5', py: 5 }}>
@@ -191,22 +187,22 @@ const ExteriorPainting: React.FC = () => {
                             {
                                 title: "1. Inspection & Preparation",
                                 text: "Thorough assessment of surfaces, identification of repairs needed, and protection of surrounding areas.",
-                                img: "/images/process/inspection.jpg"
+                                img: "/images/exteriorPainting/proc1.jpg"
                             },
                             {
                                 title: "2. Cleaning & Repairs",
                                 text: "Pressure washing, scraping, sanding, and repairing damaged surfaces for optimal paint adhesion.",
-                                img: "/images/process/cleaning.jpg"
+                                img: "/images/exteriorPainting/proc2.jpeg"
                             },
                             {
                                 title: "3. Priming & Sealing",
                                 text: "Application of high-quality primers and sealants to create a perfect foundation for the paint.",
-                                img: "/images/process/priming.jpg"
+                                img: "/images/exteriorPainting/proc3.jpg"
                             },
                             {
                                 title: "4. Painting & Finishing",
                                 text: "Expert application of premium paints with careful attention to detail and thorough clean-up.",
-                                img: "/images/process/painting.jpg"
+                                img: "/images/exteriorPainting/proc4.PNG"
                             }
                         ].map((step, index) => (
                             <Grid item key={index} xs={12} md={6} lg={3} sx={gridItemStyles}>
@@ -251,7 +247,7 @@ const ExteriorPainting: React.FC = () => {
                                     <CardMedia
                                         component="img"
                                         sx={cardMediaStyles}
-                                        image="/images/types/residential.jpg"
+                                        image="/images/exteriorPainting/type1.jpeg"
                                         alt="Residential Painting"
                                     />
                                     <CardContent sx={cardContentStyles}>
@@ -260,13 +256,11 @@ const ExteriorPainting: React.FC = () => {
                                         </Typography>
                                         <Box component="ul" sx={{ 
                                             color: isDark ? theme.palette.text.secondary : 'inherit',
-                                            pl: 2, // Reduce padding for list
-                                            mt: 1
+                                          
                                         }}>
-                                            <Box component="li" sx={listItemStyles}>Single-family homes</Box>
-                                            <Box component="li" sx={listItemStyles}>Townhouses and condos</Box>
-                                            <Box component="li" sx={listItemStyles}>Multi-family properties</Box>
-                                            <Box component="li" sx={listItemStyles}>Historic home restoration</Box>
+                                            <Typography sx={cardTextStyles} component="p">
+                                               Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem, assumenda magnam quas temporibus provident ab. Quisquam animi nobis necessitatibus? Provident, natus debitis saepe doloremque aliquid libero dignissimos perspiciatis minima accusamus.
+                                            </Typography>
                                         </Box>
                                     </CardContent>
                                 </Card>
@@ -278,7 +272,7 @@ const ExteriorPainting: React.FC = () => {
                                     <CardMedia
                                         component="img"
                                         sx={cardMediaStyles}
-                                        image="/images/types/speciality.jpg"
+                                        image="/images/exteriorPainting/type2.jpeg"
                                         alt="Specialty Surfaces"
                                     />
                                     <CardContent sx={cardContentStyles}>
@@ -286,10 +280,9 @@ const ExteriorPainting: React.FC = () => {
                                             Specialty Surfaces
                                         </Typography>
                                         <Box component="ul" sx={{ color: isDark ? theme.palette.text.secondary : 'inherit' }}>
-                                            <Box component="li" sx={listItemStyles}>Brick and stucco surfaces</Box>
-                                            <Box component="li" sx={listItemStyles}>Vinyl and aluminum siding</Box>
-                                            <Box component="li" sx={listItemStyles}>Cedar shingles and wood siding</Box>
-                                            <Box component="li" sx={listItemStyles}>Metal surfaces and gutters</Box>
+                                        <Typography sx={cardTextStyles} component="p">
+                                               Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem, assumenda magnam quas temporibus provident ab. Quisquam animi nobis necessitatibus? Provident, natus debitis saepe doloremque aliquid libero dignissimos perspiciatis minima accusamus.
+                                            </Typography>
                                         </Box>
                                     </CardContent>
                                 </Card>
@@ -314,17 +307,17 @@ const ExteriorPainting: React.FC = () => {
                             {
                                 title: "Wood Repair",
                                 text: "Replacement of rotted wood, siding repair, and structural fixes before painting.",
-                                img: "/images/repairs/wood-repair.jpg"
+                                img: "/images/exteriorPainting/repair1.png"
                             },
                             {
                                 title: "Caulking & Sealing",
                                 text: "Professional sealing of gaps, cracks, and joints to prevent water damage and improve energy efficiency.",
-                                img: "/images/repairs/caulking.jpg"
+                                img: "/images/exteriorPainting/repair2.jpg"
                             },
                             {
                                 title: "Stucco & Siding Repair",
                                 text: "Fixing damaged stucco, siding replacement, and surface preparation for optimal results.",
-                                img: "/images/repairs/stucco.jpg"
+                                img: "/images/exteriorPainting/repair3.jpeg"
                             }
                         ].map((repair, index) => (
                             <Grid item key={index} xs={12} md={4} sx={gridItemStyles}>
@@ -367,22 +360,22 @@ const ExteriorPainting: React.FC = () => {
                             {
                                 title: "Modern Farmhouse",
                                 text: "Complete exterior transformation with modern color palette",
-                                img: "/images/projects/project1.jpg"
+                                img: "/images/exteriorPainting/r1.jpg"
                             },
                             {
                                 title: "Colonial Restoration",
                                 text: "Historic home revitalization with period-appropriate colors",
-                                img: "/images/projects/project2.jpg"
+                                img: "/images/exteriorPainting/r2.jpg"
                             },
                             {
                                 title: "Ranch Renovation",
                                 text: "Complete exterior update with modern trim accents",
-                                img: "/images/projects/project3.jpg"
+                                img: "/images/exteriorPainting/r3.jpg"
                             },
                             {
                                 title: "Contemporary Design",
                                 text: "Bold color choices for a striking modern appearance",
-                                img: "/images/projects/project4.jpg"
+                                img: "/images/exteriorPainting/r4.jpg"
                             }
                         ].map((project, index) => (
                             <Grid item key={index} xs={12} md={4} lg={3} sx={gridItemStyles}>
@@ -411,37 +404,12 @@ const ExteriorPainting: React.FC = () => {
             </Box>
 
             {/* CTA Section */}
-            <Box 
-                className="cta-section py-5" 
-                sx={{ 
-                    backgroundColor: isDark ? theme.palette.primary.dark : theme.palette.primary.main,
-                    color: '#fff',
-                    py: 5
-                }}
-            >
-                <Container sx={{ textAlign: 'center' }}>
-                    <Typography variant="h3" sx={{ mb: 4 }}>
-                        Ready to Transform Your Home's Exterior?
-                    </Typography>
-                    <Typography variant="h6" sx={{ mb: 4 }}>
-                        Contact us today for a free consultation and estimate
-                    </Typography>
-                    <Button 
-                        variant={isDark ? "outlined" : "contained"}
-                        size="large"
-                        sx={{ 
-                            borderColor: isDark ? '#fff' : undefined,
-                            color: isDark ? '#fff' : theme.palette.primary.contrastText,
-                            bgcolor: isDark ? 'transparent' : theme.palette.secondary.main,
-                            '&:hover': {
-                                bgcolor: isDark ? 'rgba(255,255,255,0.1)' : theme.palette.secondary.dark
-                            }
-                        }}
-                    >
-                        Get a Free Quote
-                    </Button>
-                </Container>
-            </Box>
+            <CTASection 
+                title="Ready to Transform Your Home's Exterior?"
+                subtitle="Contact us today for a free consultation and estimate"
+                buttonText="Get a Free Quote"
+                onButtonClick={() => console.log('Quote button clicked')}
+            />
         </OutsideLayout>
     );
 };

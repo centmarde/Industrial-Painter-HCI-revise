@@ -5,6 +5,8 @@ import Login from './pages/Login';
 import Home from './pages/Home';
 import HeroLanding from './pages/index';
 import ExteriorPainting from './pages/Residential Painting/ExteriorPainting';
+import InteriorPainting from './pages/Residential Painting/InteriorPainting';
+import Services from './pages/Outside/Services';
 // Import any other components or pages you have
 
 function App() {
@@ -24,7 +26,8 @@ function App() {
           
           {/* Residential Painting routes */}
           <Route path="/residential/exterior" element={<ExteriorPainting />} />
-          
+          <Route path="/residential/interior" element={<InteriorPainting />} />
+          <Route path="/services" element={<Services />} />
           {/* Add more routes here as your application grows */}
           
           {/* Fallback for non-existent routes */}
