@@ -33,8 +33,19 @@ const Logo: React.FC<LogoProps> = ({ size = 'medium', showText = true }) => {
   
   const { imgSize, fontSize } = getSize();
   
+  const handleLogoClick = () => {
+    // Navigate to home page
+    navigate('/');
+    
+    // Scroll to top
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
+  
   return (
-    <LogoContainer onClick={() => navigate('/')}> 
+    <LogoContainer onClick={handleLogoClick}> 
       <Box
         component="img"
         src={logoImage}

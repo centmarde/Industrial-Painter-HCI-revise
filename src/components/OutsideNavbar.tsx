@@ -92,6 +92,20 @@ const OutsideNavbar: React.FC = () => {
     setMobileOpen(!mobileOpen);
   };
 
+  // Add scrollToTop function
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
+  
+  // Combine drawer close and scroll to top
+  const handleNavItemClick = () => {
+    handleDrawerToggle();
+    scrollToTop();
+  };
+
   const drawer = (
     <Box sx={{ textAlign: 'center', p: 2, height: '100%', display: 'flex', flexDirection: 'column' }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
@@ -118,7 +132,7 @@ const OutsideNavbar: React.FC = () => {
               label={item.label}
               path={item.path}
               children={item.children}
-              onClose={handleDrawerToggle}
+              onClose={handleNavItemClick}
             />
           </ListItem>
         ))}
@@ -190,6 +204,7 @@ const OutsideNavbar: React.FC = () => {
                       path={item.path}
                       children={item.children}
                       isTabItem
+                      onClose={scrollToTop}
                     />
                   ))}
                 </Box>

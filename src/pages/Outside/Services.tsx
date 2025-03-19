@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import OutsideLayout from '../../layout/OutsideLayout';
 import { useThemeContext } from '../../context/ThemeContext';
-import CTASection from '../../common/CTASection';
+
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
@@ -222,13 +222,7 @@ const Services: React.FC = () => {
         </Container>
       </Box>
       
-      {/* CTA Section */}
-      <CTASection 
-        title="Ready to Transform Your Space?"
-        subtitle="Contact us today for a free consultation and personalized quote"
-        buttonText="Get a Free Quote"
-        onButtonClick={() => navigate('/login')}
-      />
+     
     </OutsideLayout>
   );
 };

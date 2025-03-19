@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import OutsideLayout from '../../layout/OutsideLayout';
 import { useThemeContext } from '../../context/ThemeContext';
-import CTASection from '../../common/CTASection';
+
 const InteriorPainting: React.FC = () => {
   const theme = useTheme();
   const { mode } = useThemeContext();
@@ -166,12 +166,7 @@ const InteriorPainting: React.FC = () => {
 
       
     </Box>
-    <CTASection 
-                title="Ready to Transform Your Home's Exterior?"
-                subtitle="Contact us today for a free consultation and estimate"
-                buttonText="Get a Free Quote"
-                onButtonClick={() => console.log('Quote button clicked')}
-            />    
+      
     
     </OutsideLayout>
   );
