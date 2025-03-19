@@ -36,14 +36,14 @@ const navItems: NavItem[] = [
     children: [
       { label: 'Exterior Painting', path: '/residential/exterior' },
       { label: 'Interior Painting', path: '/residential/interior' },
-      { label: 'Services', path: '/residential/services' },
+      { label: 'Services', path: '/services' },
     ]
   },
   { 
     label: 'Commercial Painting', 
     path: '/commercial',
     children: [
-      { label: 'Services', path: '/commercial/services' },
+      { label: 'Services', path: '/services' },
       { label: 'National Account', path: '/commercial/national-account' },
       { label: 'Case Studies', path: '/commercial/case-studies' },
     ]
@@ -139,13 +139,6 @@ const OutsideNavbar: React.FC = () => {
             justifyContent: 'center',
             gap: 1
           }}>
-            <DarkModeIcon fontSize="small" />
-            <Typography
-              variant={isSmallMobile ? "body2" : "body1"}
-              sx={{ fontWeight: 500 }}
-            >
-              Theme
-            </Typography>
             <DarkModeToggle />
           </Box>
         </ListItem>
