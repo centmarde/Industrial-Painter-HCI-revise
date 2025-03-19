@@ -7,6 +7,7 @@ import HeroLanding from './pages/index';
 import ExteriorPainting from './pages/Residential Painting/ExteriorPainting';
 import InteriorPainting from './pages/Residential Painting/InteriorPainting';
 import Services from './pages/Outside/Services';
+import Reviews from './pages/Outside/Reviews';
 // Import any other components or pages you have
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
           <Route path="/residential/exterior" element={<ExteriorPainting />} />
           <Route path="/residential/interior" element={<InteriorPainting />} />
           <Route path="/services" element={<Services />} />
+          <Route path="/reviews" element={<Reviews />} />
           {/* Add more routes here as your application grows */}
           
           {/* Fallback for non-existent routes */}

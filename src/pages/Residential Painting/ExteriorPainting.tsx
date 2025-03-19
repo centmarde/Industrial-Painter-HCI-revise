@@ -15,7 +15,7 @@ import {
 } from '@mui/material';
 import './ExteriorPainting.css';
 import Icon from '@mui/material/Icon';
-import CTASection from '../../common/CTASection';
+
 
 const ExteriorPainting: React.FC = () => {
     const { mode } = useThemeContext();
@@ -403,13 +403,7 @@ const ExteriorPainting: React.FC = () => {
                 </Container>
             </Box>
 
-            {/* CTA Section */}
-            <CTASection 
-                title="Ready to Transform Your Home's Exterior?"
-                subtitle="Contact us today for a free consultation and estimate"
-                buttonText="Get a Free Quote"
-                onButtonClick={() => console.log('Quote button clicked')}
-            />
+           
         </OutsideLayout>
     );
 };
