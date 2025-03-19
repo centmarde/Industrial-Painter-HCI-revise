@@ -326,7 +326,7 @@ const CTASection: React.FC<CTASectionProps> = ({
                   color="text.secondary"
                   sx={{ pb: { xs: 2, md: 0 } }}
                 >
-                  © {new Date().getFullYear()} Industrial Painter. All rights reserved.
+                  © {new Date().getFullYear()} Strongest Algorithm. All rights reserved.
                 </Typography>
                 
                 <Box 

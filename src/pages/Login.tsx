@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Box, Container, Grid, Paper, Tab, Tabs, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { useNavigate } from 'react-router-dom';
 import LoginForm from '../auth/LoginForm';
 import RegisterForm from '../auth/RegisterForm';
 import DarkModeToggle from '../components/DarkModeToggle';
@@ -61,9 +62,14 @@ const Login = () => {
   const [tabValue, setTabValue] = useState(0);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const navigate = useNavigate();
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
+  };
+
+  const handleTitleClick = () => {
+    navigate('/');
   };
 
   return (
@@ -80,12 +86,13 @@ const Login = () => {
         </Box>
       )}
       
-      {/* DarkModeToggle in the top right corner */}
+      {/* DarkModeToggle in the top right corner - hidden on mobile */}
       <Box sx={{ 
         position: 'absolute', 
         top: 16, 
         right: 16,
-        zIndex: 1
+        zIndex: 1,
+        display: { xs: 'none', md: 'block' }
       }}>
         <DarkModeToggle />
       </Box>
@@ -120,10 +127,20 @@ const Login = () => {
             maxWidth: { xs: '100%', sm: 450, md: 500 },
             width: '100%'
           }}>
-            <Typography variant="h4" align="center" gutterBottom sx={{ 
-              fontWeight: 700,
-              color: (theme: any) => theme.custom.darkest 
-            }}>
+            <Typography 
+              variant="h4" 
+              align="center" 
+              gutterBottom 
+              sx={{ 
+                fontWeight: 700,
+                color: (theme: any) => theme.custom.darkest,
+                cursor: 'pointer',
+                '&:hover': {
+                  opacity: 0.9,
+                }
+              }}
+              onClick={handleTitleClick}
+            >
               Industrial Painter
             </Typography>
             
