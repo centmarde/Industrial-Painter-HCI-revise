@@ -9,6 +9,11 @@ import InteriorPainting from './pages/Residential Painting/InteriorPainting';
 import Services from './pages/Outside/Services';
 import Reviews from './pages/Outside/Reviews';
 import NationalAccount from './pages/Outside/NationalAccount';
+import CaseStudies from './pages/Outside/CaseStudies';
+import WhyChooseUs from './pages/AboutUs/WhyChooseUs'
+import SocialPorpuse from './pages/AboutUs/SocialPorpuse'
+import PaintingBlog from './pages/AboutUs/PaintingBlog'
+import Diversity from './pages/AboutUs/Diversity'
 // Import any other components or pages you have
 
 function App() {
@@ -32,6 +37,11 @@ function App() {
           <Route path="/services" element={<Services />} />
           <Route path="/reviews" element={<Reviews />} />
           <Route path="/commercial/national-account" element={<NationalAccount />} />
+          <Route path="/commercial/case-studies" element={<CaseStudies />} />
+          <Route path="/about/why-choose-us" element={<WhyChooseUs />} />
+          <Route path="/about/social-purpose" element={<SocialPorpuse />} />
+          <Route path="/about/blog" element={<PaintingBlog />} />
+          <Route path="/about/diversity" element={<Diversity />} />
           {/* Add more routes here as your application grows */}
           
           {/* Fallback for non-existent routes */}
