@@ -20,6 +20,8 @@ import WhyFranchise from './pages/Franchise/WhyFranchise';
 import TheProcess from './pages/Franchise/TheProcess';
 import Investment from './pages/Franchise/Investment';
 import AvailableMarkets from './pages/Franchise/AvailableMarkets';
+import PositionNearYou from './pages/Position/PositionNearYou';
+import Corporate from './pages/Position/Corporate';
 // Import any other components or pages you have
 
 function App() {
@@ -54,6 +56,8 @@ function App() {
           <Route path="/franchise/process" element={<TheProcess />} />
           <Route path="/franchise/investment" element={<Investment />} />
           <Route path="/franchise/markets" element={<AvailableMarkets />} />
+          <Route path="/careers/positions" element={<PositionNearYou />} />
+          <Route path="/careers/corporate" element={<Corporate />} />
           {/* Add more routes here as your application grows */}
           
           {/* Fallback for non-existent routes */}
