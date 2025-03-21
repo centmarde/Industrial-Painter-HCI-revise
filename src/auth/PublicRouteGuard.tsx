@@ -1,17 +1,20 @@
 import { ReactNode, useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
-import { Box, CircularProgress, Typography } from '@mui/material';
 import { useAuth } from '../stores/Auth';
 import { useUserStore } from '../stores/UserStore';
-import 'react-toastify/dist/ReactToastify.css';
+import { Box, CircularProgress, Typography } from '@mui/material';
 import { showToast, toastMessages } from '../utils/toastConfig';
+import 'react-toastify/dist/ReactToastify.css';
 
-interface AuthGuardProps {
+interface PublicRouteGuardProps {
   children: ReactNode;
-  fallbackPath?: string;
+  redirectPath?: string;
 }
 
-const AuthGuard = ({ children, fallbackPath = '/login' }: AuthGuardProps) => {
+const PublicRouteGuard = ({ 
+  children, 
+  redirectPath = '/home' 
+}: PublicRouteGuardProps) => {
   const { currentUser, loading } = useAuth();
   const storedUser = useUserStore(state => state.user);
   const [checking, setChecking] = useState(true);
@@ -19,14 +22,14 @@ const AuthGuard = ({ children, fallbackPath = '/login' }: AuthGuardProps) => {
   
   // Check if we have a user from either source
   const hasUser = Boolean(currentUser || storedUser);
-
-  useEffect(() => {
-    // Only continue checking if we're still loading and don't have a user
-    if (!loading || hasUser) {
-      setChecking(false);
-    }
-  }, [currentUser, loading, hasUser]);
   
+  useEffect(() => {
+    if (!loading) {
+      setChecking(false);
+     
+    }
+  }, [loading, hasUser]);
+
   // Add a minimum 2-second delay for the loading screen
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -36,8 +39,13 @@ const AuthGuard = ({ children, fallbackPath = '/login' }: AuthGuardProps) => {
     return () => clearTimeout(timer);
   }, []);
 
-  // Show loading state only if we're still authenticating or minimum delay hasn't passed
-  if (((loading || checking) && !storedUser) || !minDelayPassed) {
+  // If we have a stored user and minimum delay has passed, redirect
+  if (hasUser && minDelayPassed) {
+    return <Navigate to={redirectPath} replace />;
+  }
+
+  // Show loading if we're still authenticating or if the minimum delay hasn't passed
+  if ((loading && !hasUser && checking) || !minDelayPassed) {
     return (
       <Box 
         sx={{ 
@@ -56,13 +64,8 @@ const AuthGuard = ({ children, fallbackPath = '/login' }: AuthGuardProps) => {
     );
   }
 
-  // If not authenticated after checking and minimum delay has passed, redirect
-  if (!hasUser && !checking && minDelayPassed) {
-    return <Navigate to={fallbackPath} replace />;
-  }
-
-  // Either authenticated or still checking with a stored user
+  // Not authenticated and minimum delay passed, render the children (public content)
   return <>{children}</>;
 };
 
-export default AuthGuard;
+export default PublicRouteGuard;

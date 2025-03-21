@@ -14,10 +14,11 @@ export const toastConfig: ToastOptions = {
 
 // Standard message templates (can be reused across components)
 export const toastMessages = {
-  authRequired: 'Authentication required. Please log in to continue.',
+  authRequired: 'Authentication required. Please log in to access this page.',
   loginSuccess: 'Successfully logged in!',
   loginError: 'Login failed. Please check your credentials.',
   logoutSuccess: 'Successfully logged out!',
+  alreadyAuthenticated: 'You are already logged in. Redirecting to your dashboard.',
   // Add more standard messages as needed
 };
 

@@ -3,8 +3,10 @@ import { ThemeProvider } from './context/ThemeContext';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './stores/Auth';
 import AuthGuard from './auth/AuthGuard';
+import PublicRouteGuard from './auth/PublicRouteGuard';
+import { createPublicRoutes, createProtectedRoutes } from './auth/RouteGroups';
 import Login from './pages/Login';
-import Home from './pages/Home';
+import Home from './pages/InsideContents/Home';
 import HeroLanding from './pages/index';
 import ExteriorPainting from './pages/Residential Painting/ExteriorPainting';
 import InteriorPainting from './pages/Residential Painting/InteriorPainting';
@@ -28,6 +30,18 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
+  // Define public route configs
+  const publicRoutes = [
+    { path: '/', element: <HeroLanding /> },
+    { path: '/login', element: <Login /> },
+  ];
+
+  // Define protected route configs
+  const protectedRoutes = [
+    { path: '/home', element: <Home /> },
+    // Add other protected routes here
+  ];
+
   return (
     <AuthProvider>
       <ThemeProvider>
@@ -35,20 +49,10 @@ function App() {
         <ToastContainer />
         <Router>
           <Routes>
-            {/* HeroLanding as the default landing page */}
-            <Route path="/" element={<HeroLanding />} />
+            {/* Generate all public routes */}
+            {createPublicRoutes(publicRoutes)}
             
-            {/* Auth routes */}
-            <Route path="/login" element={<Login />} />
-            
-            {/* Home/Dashboard route - fixed AuthGuard placement */}
-            <Route path="/home" element={
-              <AuthGuard fallbackPath="/login">
-                <Home />
-              </AuthGuard>
-            } />
-            
-            {/* Residential Painting routes */}
+            {/* Routes accessible to both authenticated and unauthenticated users */}
             <Route path="/residential/exterior" element={<ExteriorPainting />} />
             <Route path="/residential/interior" element={<InteriorPainting />} />
             <Route path="/services" element={<Services />} />
@@ -67,9 +71,10 @@ function App() {
             <Route path="/franchise/markets" element={<AvailableMarkets />} />
             <Route path="/careers/positions" element={<PositionNearYou />} />
             <Route path="/careers/corporate" element={<Corporate />} />
-            {/* Add more routes here as your application grows */}
             
-            
+            {/* Generate all protected routes */}
+            {createProtectedRoutes(protectedRoutes, '/login')}
+
             {/* Fallback for non-existent routes */}
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>

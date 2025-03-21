@@ -8,6 +8,7 @@ import {
   updateProfile
 } from 'firebase/auth';
 import { auth } from '../lib/FirebaseConfig';
+import { useUserStore } from './UserStore';
 
 interface AuthContextProps {
   currentUser: User | null;
@@ -32,17 +33,29 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
+  // Use the Zustand store for user data
+  const setUser = useUserStore(state => state.setUser);
+  const resetUser = useUserStore(state => state.resetUser);
+ 
+  // We no longer initialize from Zustand to avoid circular dependency
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-
+  
+  
+  
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setCurrentUser(user);
+      // Only update states if there's a change to avoid loops
+      if (JSON.stringify(currentUser) !== JSON.stringify(user)) {
+        setCurrentUser(user);
+        // Also update Zustand store
+        setUser(user);
+      }
       setLoading(false);
     });
 
     return unsubscribe;
-  }, []);
+  }, [setUser]);
 
   const login = async (email: string, password: string) => {
     try {
@@ -68,8 +81,16 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   };
 
-  const logout = () => {
-    return signOut(auth);
+  const logout = async () => {
+    await signOut(auth);
+    resetUser();
+    
+    // Add 3 seconds delay before navigation
+    setTimeout(() => {
+      window.location.href = '/login';
+    }, 3000);
+    
+    return;
   };
 
   const value = {
