@@ -11,18 +11,13 @@ import {
   Divider, 
   CircularProgress, 
   Alert, 
-  useTheme,
-  Tooltip,
-  Switch,
-  FormControlLabel
+  useTheme 
 } from '@mui/material';
 import MyLocationIcon from '@mui/icons-material/MyLocation';
 import LocationSearchingIcon from '@mui/icons-material/LocationSearching';
 import PlaceIcon from '@mui/icons-material/Place';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import LockIcon from '@mui/icons-material/Lock';
 import OutsideLayout from '../../layout/OutsideLayout';
-
 interface Location {
   address: string;
   city: string;
@@ -46,136 +41,91 @@ const Gmap: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [address, setAddress] = useState<string>('');
   const [city, setCity] = useState<string>('');
-  const [enableButtons, setEnableButtons] = useState<boolean>(false);
   
   // Add map related state and refs
   const mapRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<google.maps.Map | null>(null);
   const [marker, setMarker] = useState<google.maps.Marker | null>(null);
-  const apiKey = "AlzaSyQXsNE7PutrVqvZ7ngej9Ku5grw2PuqT_V";
   // Add state to track if map is initialized to prevent re-initialization
   const [isMapInitialized, setIsMapInitialized] = useState<boolean>(false);
-  // Add a new state to track if the Google Maps API script has been loaded
-  const [isScriptLoaded, setIsScriptLoaded] = useState<boolean>(false);
-  
-  // Define default coordinates
-  const defaultLat = 8.961334530855755;
-  const defaultLng = 125.597603650452;
 
-  useEffect(() => {
-    // Set default location when component mounts
-    setLocation({
-      address: "Default Location",
-      city: "Butuan City",
-      state: "PH",
-      validated: true,
-      lat: defaultLat,
-      lng: defaultLng
-    });
-  }, []);
-
-  // Separate the map initialization from API loading
+  // Initialize Google Maps when component mounts
   useEffect(() => {
     // Define the global callback function for the Google Maps script
     window.initMap = () => {
       if (mapRef.current && !map && !isMapInitialized) {
-        const defaultLocation = { lat: defaultLat, lng: defaultLng };
+        // Set default location to the Philippines coordinates
+        const defaultLocation = { lat: 8.957816018448368, lng: 125.59743198938389 };
+       
+        const mapOptions: google.maps.MapOptions = {
+          center: defaultLocation,
+          zoom: 14, // Increased zoom level for better visibility of the location
+          mapTypeId: google.maps.MapTypeId.ROADMAP,
+          mapTypeControl: true,
+          streetViewControl: true,
+          fullscreenControl: true,
+          zoomControl: true,
+          zoomControlOptions: {
+            position: google.maps.ControlPosition.RIGHT_CENTER
+          },
+        };
         
-        // Create a basic map without API features first
-        try {
-          const mapOptions: google.maps.MapOptions = {
-            center: defaultLocation,
-            zoom: 14,
-            mapTypeId: google.maps.MapTypeId.ROADMAP,
-            mapTypeControl: true,
-            streetViewControl: true,
-            fullscreenControl: true,
-            zoomControl: true,
-            zoomControlOptions: {
-              position: google.maps.ControlPosition.RIGHT_CENTER
-            },
-          };
-          
-          const newMap = new google.maps.Map(mapRef.current, mapOptions);
-          setMap(newMap);
-          setIsMapInitialized(true);
-          
-          // Add default marker
-          const defaultMarker = new google.maps.Marker({
-            position: defaultLocation,
-            map: newMap,
-            title: "Default Location",
-            animation: google.maps.Animation.DROP
-          });
-          
-          setMarker(defaultMarker);
-          
-          // Add info window to default marker
-          const infoContent = `
-            <div style="padding: 8px; max-width: 250px;">
-              <h3 style="margin: 0 0 8px; font-size: 16px; font-weight: bold;">
-                Default Location
-              </h3>
-              <p style="margin: 0;">
-                Butuan City, PH
-              </p>
-              <p style="margin: 8px 0 0; font-size: 12px; color: #666;">
-                Coordinates: ${defaultLat.toFixed(6)}, ${defaultLng.toFixed(6)}
-              </p>
-            </div>
-          `;
-          
-          const infoWindow = new google.maps.InfoWindow({
-            content: infoContent
-          });
-          
-          defaultMarker.addListener('click', () => {
-            infoWindow.open(newMap, defaultMarker);
-          });
-          
-          // Auto-open the info window for the default marker
-          setTimeout(() => {
-            infoWindow.open(newMap, defaultMarker);
-          }, 500);
-        } catch (error) {
-          console.error("Error initializing map:", error);
-        }
+        const newMap = new google.maps.Map(mapRef.current, mapOptions);
+        setMap(newMap);
+        
+        // Add a default marker at the specified location
+        const defaultMarker = new google.maps.Marker({
+          position: defaultLocation,
+          map: newMap,
+          title: "Default Location",
+          animation: google.maps.Animation.DROP
+        });
+        
+        setMarker(defaultMarker);
+        
+        // Add an info window for the default marker
+        const infoContent = `
+          <div style="padding: 8px; max-width: 250px;">
+            <h3 style="margin: 0 0 8px; font-size: 16px; font-weight: bold;">
+              Default Location
+            </h3>
+            <p style="margin: 8px 0 0; font-size: 12px; color: #666;">
+              Coordinates: ${defaultLocation.lat.toFixed(6)}, ${defaultLocation.lng.toFixed(6)}
+            </p>
+          </div>
+        `;
+        
+        const infoWindow = new google.maps.InfoWindow({
+          content: infoContent
+        });
+        
+        defaultMarker.addListener('click', () => {
+          infoWindow.open(newMap, defaultMarker);
+        });
+        
+        setIsMapInitialized(true);
       }
     };
 
-    // Only try to initialize if the script has been loaded or Google is already available
-    if ((isScriptLoaded || window.google) && !isMapInitialized) {
-      window.initMap();
-    }
-  }, [isScriptLoaded, map, isMapInitialized, defaultLat, defaultLng]);
-
-  // Separate effect for loading the Google Maps script, only when enabled
-  useEffect(() => {
-    // Only load the script when the user enables the features and it hasn't been loaded yet
-    if (enableButtons && !isScriptLoaded && !window.google) {
+    // Load the Google Maps script if it hasn't been loaded already
+    if (!window.google && !isMapInitialized) {
       const script = document.createElement('script');
-      
-      // Add a static version of the map first without API key
-      if (!enableButtons) {
-        script.src = 'https://maps.gomaps.pro/maps/api/js?libraries=geometry,places&callback=initMap';
-      } else {
-        // Only add the API key when the user has explicitly enabled features
-        script.src = `https://maps.gomaps.pro/maps/api/js?key=${apiKey}&libraries=geometry,places&callback=initMap`;
-      }
-      
+      script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyAOVYRIgupAurZup5y1PRh8Ismb1A3lLao&libraries=places&callback=initMap`;
       script.async = true;
       script.defer = true;
-      script.onload = () => setIsScriptLoaded(true);
       document.head.appendChild(script);
       
       return () => {
-        // Cleanup function to remove the script if component unmounts
+        // Cleanup function to remove the script and callback
         if (document.head.contains(script)) {
           document.head.removeChild(script);
         }
       };
+    } else if (window.google && !isMapInitialized) {
+      // If Google Maps API is already loaded, just initialize the map
+      window.initMap();
     }
-  }, [enableButtons, isScriptLoaded, apiKey]);
+  }, [map, isMapInitialized]);
 
   // Update map when location changes
   useEffect(() => {
@@ -254,71 +204,15 @@ const Gmap: React.FC = () => {
     setIsLoading(true);
     setError(null);
 
-    const myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-
-    const raw = JSON.stringify({
-      "address": {
-        "regionCode": "US",
-        "locality": city,
-        "addressLines": [
-          address
-        ]
-      }
-    });
-
-    const requestOptions = {
-      method: 'POST',
-      headers: myHeaders,
-      body: raw,
-      redirect: 'follow' as RequestRedirect
-    };
-
-    try {
-      const response = await fetch(
-        `https://addressvalidation.gomaps.pro/v1:validateAddress?key=${apiKey}`, 
-        requestOptions
-      );
-      
-      if (!response.ok) {
-        throw new Error('Address validation failed');
-      }
-      
-      const result = await response.json();
-      console.log(result);
-      
-      // Extract location info from response - adapt based on actual API response structure
-      // This is an example structure, adjust according to the actual API response
-      const lat = result.result?.geocode?.location?.latitude;
-      const lng = result.result?.geocode?.location?.longitude;
-      
-      if (lat && lng) {
-        setLocation({
-          address: address,
-          city: city,
-          state: 'US',
-          validated: true,
-          lat: lat,
-          lng: lng
-        });
-      } else {
-        // If the validation API doesn't return coordinates, use geocoding
-        geocodeAddress();
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      setError('Failed to validate address. Please try again.');
-      // Try to geocode the address as a fallback
-      geocodeAddress();
-    } finally {
-      setIsLoading(false);
-    }
+    // Use Google Maps Geocoding API directly instead of gomaps
+    geocodeAddress();
   };
 
   // Add geocoding function to convert address to coordinates
   const geocodeAddress = () => {
     if (!window.google) {
       setError('Maps API not loaded yet. Please try again later.');
+      setIsLoading(false);
       return;
     }
     
@@ -337,8 +231,10 @@ const Gmap: React.FC = () => {
           lat: position.lat(),
           lng: position.lng()
         });
+        setIsLoading(false);
       } else {
         setError(`Could not find coordinates for this address. Status: ${status}`);
+        setIsLoading(false);
       }
     });
   };
@@ -432,18 +328,6 @@ const Gmap: React.FC = () => {
     }
   };
 
-  // Handle the toggle switch change
-  const handleToggleFeatures = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const isEnabled = event.target.checked;
-    setEnableButtons(isEnabled);
-    
-    // If enabling and the map isn't initialized with API features yet, we can reload
-    if (isEnabled && !isScriptLoaded && !window.google) {
-      // Map will be loaded with API key via the useEffect
-      setIsMapInitialized(false);
-    }
-  };
-
   return (
     <OutsideLayout>
     <Box sx={{ 
@@ -490,26 +374,6 @@ const Gmap: React.FC = () => {
         />
       </Paper>
       
-      {/* API Conservation Notice */}
-      <Alert 
-        severity="info" 
-        sx={{ mb: 3 }}
-        action={
-          <FormControlLabel
-            control={
-              <Switch 
-                checked={enableButtons} 
-                onChange={handleToggleFeatures}
-                color="primary"
-              />
-            }
-            label="Enable Features"
-          />
-        }
-      >
-        Location features are disabled to conserve API usage. Toggle the switch to enable them.
-      </Alert>
-      
       <Grid container spacing={3}>
         <Grid item xs={12} md={6}>
           <Paper
@@ -520,33 +384,11 @@ const Gmap: React.FC = () => {
               borderRadius: theme.shape.borderRadius,
               transition: 'transform 0.2s, box-shadow 0.2s',
               '&:hover': {
-                transform: enableButtons ? 'translateY(-4px)' : 'none',
-                boxShadow: enableButtons ? theme.shadows[6] : theme.shadows[3]
-              },
-              opacity: enableButtons ? 1 : 0.7,
-              position: 'relative'
+                transform: 'translateY(-4px)',
+                boxShadow: theme.shadows[6]
+              }
             }}
           >
-            {!enableButtons && (
-              <Box sx={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                backgroundColor: 'rgba(0, 0, 0, 0.05)',
-                zIndex: 10,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                borderRadius: theme.shape.borderRadius,
-              }}>
-                <Tooltip title="Enable features to use location services">
-                  <LockIcon sx={{ fontSize: 48, color: 'rgba(0, 0, 0, 0.2)' }} />
-                </Tooltip>
-              </Box>
-            )}
-            
             <Box sx={{ textAlign: 'center', mb: 3 }}>
               <Button
                 variant="contained"
@@ -554,7 +396,7 @@ const Gmap: React.FC = () => {
                 size="large"
                 startIcon={<MyLocationIcon />}
                 onClick={getUserLocation}
-                disabled={isLoading || !enableButtons}
+                disabled={isLoading}
                 fullWidth
                 sx={{
                   py: 1.5,
@@ -573,7 +415,7 @@ const Gmap: React.FC = () => {
                     transition: 'transform 0.3s',
                   },
                   '&:hover::after': {
-                    transform: enableButtons ? 'translateX(100%)' : 'translateX(-100%)',
+                    transform: 'translateX(100%)',
                   }
                 }}
               >
@@ -605,7 +447,6 @@ const Gmap: React.FC = () => {
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
                   placeholder="e.g. 1600 Amphitheatre Pkwy"
-                  disabled={!enableButtons}
                   InputProps={{
                     startAdornment: <PlaceIcon color="action" sx={{ mr: 1 }} />,
                   }}
@@ -621,7 +462,6 @@ const Gmap: React.FC = () => {
                   value={city}
                   onChange={(e) => setCity(e.target.value)}
                   placeholder="e.g. Mountain View"
-                  disabled={!enableButtons}
                 />
               </Grid>
               
@@ -633,12 +473,12 @@ const Gmap: React.FC = () => {
                   fullWidth
                   startIcon={<LocationSearchingIcon />}
                   onClick={validateAddress}
-                  disabled={isLoading || !enableButtons}
+                  disabled={isLoading}
                   sx={{ py: 1.5 }}
                 >
                   {isLoading ? 
                     <CircularProgress color="inherit" size={24} sx={{ mr: 1 }} /> : 
-                    'Validate Address'
+                    'Find Address'
                   }
                 </Button>
               </Grid>
