@@ -10,24 +10,34 @@ A professional painting services management application built with modern web te
   <img src="https://img.shields.io/badge/Vite-B73BFE?style=for-the-badge&logo=vite&logoColor=FFD62E" alt="Vite" />
   <img src="https://img.shields.io/badge/Material%20UI-007FFF?style=for-the-badge&logo=mui&logoColor=white" alt="Material UI" />
   <img src="https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white" alt="React Router" />
+  <img src="https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black" alt="Firebase" />
+  <img src="https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white" alt="Axios" />
+  <img src="https://img.shields.io/badge/Zustand-000000?style=for-the-badge&logo=zustand&logoColor=white" alt="Zustand" />
   <img src="https://img.shields.io/badge/Styled_Components-DB7093?style=for-the-badge&logo=styled-components&logoColor=white" alt="Styled Components" />
   <img src="https://img.shields.io/badge/FortAwesome-528DD7?style=for-the-badge&logo=font-awesome&logoColor=white" alt="Font Awesome" />
+  <img src="https://img.shields.io/badge/React_Toastify-FFC107?style=for-the-badge&logo=react&logoColor=black" alt="React Toastify" />
 </div>
 
-- **React** - UI library for building component-based interfaces
-- **TypeScript** - Static typing for more robust code
-- **Vite** - Next generation frontend tooling for fast development
-- **Material UI** - React component library implementing Google's Material Design
-- **React Router** - Declarative routing for React applications
+- **React 19** - Modern UI library for building component-based interfaces
+- **TypeScript 5.7** - Static typing for more robust code
+- **Vite 6** - Next generation frontend tooling for fast development
+- **Material UI 6** - React component library implementing Google's Material Design
+- **React Router 7** - Declarative routing for React applications
+- **Firebase 11** - Backend-as-a-service for authentication and database
+- **Axios** - Promise-based HTTP client for API requests
+- **Zustand** - Lightweight state management solution
 - **Styled Components** - Visual primitives for the component age
 - **Font Awesome** - Scalable vector icons that can be customized
+- **React Toastify** - Notification system for React applications
+- **date-fns** - Modern JavaScript date utility library
 
 ## Features
 
-- User authentication with secure login
+- User authentication with secure login via Firebase
 - Responsive design works on desktop and mobile devices
 - Form validation with immediate feedback
 - Modern UI with smooth animations and transitions
+- Toast notifications for user feedback
 
 ## Development
 
