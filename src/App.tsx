@@ -1,6 +1,8 @@
 import { CssBaseline } from '@mui/material';
 import { ThemeProvider } from './context/ThemeContext';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from './stores/Auth';
+import AuthGuard from './auth/AuthGuard';
 import Login from './pages/Login';
 import Home from './pages/Home';
 import HeroLanding from './pages/index';
@@ -22,49 +24,58 @@ import Investment from './pages/Franchise/Investment';
 import AvailableMarkets from './pages/Franchise/AvailableMarkets';
 import PositionNearYou from './pages/Position/PositionNearYou';
 import Corporate from './pages/Position/Corporate';
-// Import any other components or pages you have
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (
-    <ThemeProvider>
-      <CssBaseline />
-      <BrowserRouter>
-        <Routes>
-          {/* HeroLanding as the default landing page */}
-          <Route path="/" element={<HeroLanding />} />
-          
-          {/* Auth routes */}
-          <Route path="/login" element={<Login />} />
-          
-          {/* Home/Dashboard route */}
-          <Route path="/home" element={<Home />} />
-          
-          {/* Residential Painting routes */}
-          <Route path="/residential/exterior" element={<ExteriorPainting />} />
-          <Route path="/residential/interior" element={<InteriorPainting />} />
-          <Route path="/services" element={<Services />} />
-          <Route path="/reviews" element={<Reviews />} />
-          <Route path="/commercial/national-account" element={<NationalAccount />} />
-          <Route path="/commercial/case-studies" element={<CaseStudies />} />
-          <Route path="/about/why-choose-us" element={<WhyChooseUs />} />
-          <Route path="/about/social-purpose" element={<SocialPorpuse />} />
-          <Route path="/about/blog" element={<PaintingBlog />} />
-          <Route path="/about/diversity" element={<Diversity />} />
-          <Route path="/locations" element={<Gmap />} />
-          <Route path="/franchise/our-story" element={<OurStory />} />
-          <Route path="/franchise/why-franchise" element={<WhyFranchise />} />
-          <Route path="/franchise/process" element={<TheProcess />} />
-          <Route path="/franchise/investment" element={<Investment />} />
-          <Route path="/franchise/markets" element={<AvailableMarkets />} />
-          <Route path="/careers/positions" element={<PositionNearYou />} />
-          <Route path="/careers/corporate" element={<Corporate />} />
-          {/* Add more routes here as your application grows */}
-          
-          {/* Fallback for non-existent routes */}
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </BrowserRouter>
-    </ThemeProvider>
+    <AuthProvider>
+      <ThemeProvider>
+        <CssBaseline />
+        <ToastContainer />
+        <Router>
+          <Routes>
+            {/* HeroLanding as the default landing page */}
+            <Route path="/" element={<HeroLanding />} />
+            
+            {/* Auth routes */}
+            <Route path="/login" element={<Login />} />
+            
+            {/* Home/Dashboard route - fixed AuthGuard placement */}
+            <Route path="/home" element={
+              <AuthGuard fallbackPath="/login">
+                <Home />
+              </AuthGuard>
+            } />
+            
+            {/* Residential Painting routes */}
+            <Route path="/residential/exterior" element={<ExteriorPainting />} />
+            <Route path="/residential/interior" element={<InteriorPainting />} />
+            <Route path="/services" element={<Services />} />
+            <Route path="/reviews" element={<Reviews />} />
+            <Route path="/commercial/national-account" element={<NationalAccount />} />
+            <Route path="/commercial/case-studies" element={<CaseStudies />} />
+            <Route path="/about/why-choose-us" element={<WhyChooseUs />} />
+            <Route path="/about/social-purpose" element={<SocialPorpuse />} />
+            <Route path="/about/blog" element={<PaintingBlog />} />
+            <Route path="/about/diversity" element={<Diversity />} />
+            <Route path="/locations" element={<Gmap />} />
+            <Route path="/franchise/our-story" element={<OurStory />} />
+            <Route path="/franchise/why-franchise" element={<WhyFranchise />} />
+            <Route path="/franchise/process" element={<TheProcess />} />
+            <Route path="/franchise/investment" element={<Investment />} />
+            <Route path="/franchise/markets" element={<AvailableMarkets />} />
+            <Route path="/careers/positions" element={<PositionNearYou />} />
+            <Route path="/careers/corporate" element={<Corporate />} />
+            {/* Add more routes here as your application grows */}
+            
+            
+            {/* Fallback for non-existent routes */}
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </Router>
+      </ThemeProvider>
+    </AuthProvider>
   );
 }
 

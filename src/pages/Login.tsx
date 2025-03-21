@@ -72,6 +72,10 @@ const Login = () => {
     navigate('/');
   };
 
+  const handleRegisterSuccess = () => {
+    setTabValue(0); // Switch to login tab (index 0)
+  };
+
   return (
     <StyledContainer maxWidth={false}>
       {/* Logo in the top left corner - hidden on mobile */}
@@ -155,7 +159,10 @@ const Login = () => {
             </StyledTabs>
             
             <Box sx={{ mt: 2 }}>
-              {tabValue === 0 ? <LoginForm /> : <RegisterForm />}
+              {tabValue === 0 ? 
+                <LoginForm /> : 
+                <RegisterForm onRegisterSuccess={handleRegisterSuccess} />
+              }
             </Box>
           </StyledPaper>
         </Grid>
