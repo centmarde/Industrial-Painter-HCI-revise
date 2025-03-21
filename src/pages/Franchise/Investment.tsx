@@ -120,30 +120,40 @@ const InvestmentPage: React.FC = () => {
           We know you want to be successful, and we want our success to be yours to make your dream of business ownership a reality. The total investment to start a CertaPro franchise ranges from $171,000 to $302,500. The cost ranges that make up the total investment are broken down below.
         </Typography>
 
-        <TableContainer component={Paper} sx={{ mt: 4, borderRadius: 2, overflow: 'hidden' }}>
-          <Table>
-            <TableHead sx={{ backgroundColor: theme.palette.primary.main }}>
-              <TableRow>
-                <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Investment Category</TableCell>
-                <TableCell align="right" sx={{ color: 'white', fontWeight: 'bold' }}>Low</TableCell>
-                <TableCell align="right" sx={{ color: 'white', fontWeight: 'bold' }}>High</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {investmentData.map((row) => (
-                <TableRow key={row.category} sx={{ '&:nth-of-type(odd)': { backgroundColor: theme.palette.action.hover } }}>
-                  <TableCell component="th" scope="row">{row.category}</TableCell>
-                  <TableCell align="right">{formatCurrency(row.low)}</TableCell>
-                  <TableCell align="right">{formatCurrency(row.high)}</TableCell>
+        <TableContainer 
+          component={Paper} 
+          sx={{ 
+            mt: 4, 
+            borderRadius: 2, 
+            overflow: 'hidden',
+            maxWidth: '100%'
+          }}
+        >
+          <Box sx={{ overflowX: 'auto' }}>
+            <Table>
+              <TableHead sx={{ backgroundColor: theme.palette.primary.main }}>
+                <TableRow>
+                  <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Investment Category</TableCell>
+                  <TableCell align="right" sx={{ color: 'white', fontWeight: 'bold' }}>Low</TableCell>
+                  <TableCell align="right" sx={{ color: 'white', fontWeight: 'bold' }}>High</TableCell>
                 </TableRow>
-              ))}
-              <TableRow sx={{ backgroundColor: theme.palette.secondary.dark }}>
-                <TableCell component="th" scope="row" sx={{ fontWeight: 'bold' }}>Total Investment</TableCell>
-                <TableCell align="right" sx={{ fontWeight: 'bold' }}>{formatCurrency(totalLow)}</TableCell>
-                <TableCell align="right" sx={{ fontWeight: 'bold' }}>{formatCurrency(totalHigh)}</TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
+              </TableHead>
+              <TableBody>
+                {investmentData.map((row) => (
+                  <TableRow key={row.category} sx={{ '&:nth-of-type(odd)': { backgroundColor: theme.palette.action.hover } }}>
+                    <TableCell component="th" scope="row">{row.category}</TableCell>
+                    <TableCell align="right">{formatCurrency(row.low)}</TableCell>
+                    <TableCell align="right">{formatCurrency(row.high)}</TableCell>
+                  </TableRow>
+                ))}
+                <TableRow sx={{ backgroundColor: theme.palette.secondary.dark }}>
+                  <TableCell component="th" scope="row" sx={{ fontWeight: 'bold' }}>Total Investment</TableCell>
+                  <TableCell align="right" sx={{ fontWeight: 'bold' }}>{formatCurrency(totalLow)}</TableCell>
+                  <TableCell align="right" sx={{ fontWeight: 'bold' }}>{formatCurrency(totalHigh)}</TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </Box>
         </TableContainer>
       </Paper>
 

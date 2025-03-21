@@ -28,6 +28,12 @@ import {
   validateTermsAccepted,
   getPasswordStrength 
 } from '../utils/Validator';
+import { useAuth } from '../stores/Auth';
+import { showToast } from '../utils/toastConfig';
+
+interface RegisterFormProps {
+  onRegisterSuccess?: () => void;
+}
 
 const AnimatedButton = styled(Button)(({ theme }) => ({
   marginTop: theme.spacing(2),
@@ -75,7 +81,7 @@ const PasswordStrengthIndicator = styled(Box)(({ theme }) => ({
   alignItems: 'center',
 }));
 
-const RegisterForm = () => {
+const RegisterForm = ({ onRegisterSuccess }: RegisterFormProps) => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -93,8 +99,11 @@ const RegisterForm = () => {
     email: '',
     password: '',
     confirmPassword: '',
-    agreeToTerms: ''
+    agreeToTerms: '',
+    auth: ''
   });
+
+  const { register } = useAuth();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, checked } = e.target;
@@ -157,7 +166,8 @@ const RegisterForm = () => {
       email: '', 
       password: '', 
       confirmPassword: '',
-      agreeToTerms: ''
+      agreeToTerms: '',
+      auth: ''
     };
     let isValid = true;
     
@@ -201,14 +211,39 @@ const RegisterForm = () => {
     
     if (validateForm()) {
       setIsLoading(true);
+      setErrors(prev => ({ ...prev, auth: '' }));
       
-      // Simulate API call
       try {
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        console.log('Registration attempt with:', formData);
+        await register(formData.email, formData.password, formData.name);
+        console.log('Registration successful');
+        showToast.success('Registration successful! You can now log in.');
         setRegistrationSuccess(true);
-      } catch (error) {
+        
+        // Clear form data
+        setFormData({
+          name: '',
+          email: '',
+          password: '',
+          confirmPassword: '',
+          agreeToTerms: false
+        });
+        
+        // Remove the timeout - we'll let the user choose when to switch tabs
+        // by clicking the button instead of auto-switching
+      } catch (error: any) {
         console.error('Registration error:', error);
+        let errorMessage = 'Registration failed. Please try again.';
+        
+        if (error.code === 'auth/email-already-in-use') {
+          errorMessage = 'Email is already in use.';
+        } else if (error.code === 'auth/weak-password') {
+          errorMessage = 'Password is too weak.';
+        } else if (error.code === 'auth/invalid-email') {
+          errorMessage = 'Invalid email address.';
+        }
+        
+        setErrors(prev => ({ ...prev, auth: errorMessage }));
+        showToast.error(errorMessage);
       } finally {
         setIsLoading(false);
       }
@@ -229,10 +264,14 @@ const RegisterForm = () => {
         </Typography>
         <Button
           variant="contained"
-          onClick={() => setRegistrationSuccess(false)}
+          onClick={() => {
+            setRegistrationSuccess(false);
+            // Always call onRegisterSuccess to switch to login tab when button is clicked
+            if (onRegisterSuccess) onRegisterSuccess();
+          }}
           sx={{ mt: 2 }}
         >
-          Back to Login
+          Go to Login
         </Button>
       </Box>
     );
@@ -240,6 +279,12 @@ const RegisterForm = () => {
 
   return (
     <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
+      {errors.auth && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {errors.auth}
+        </Alert>
+      )}
+      
       <StyledTextField
         fullWidth
         id="name"

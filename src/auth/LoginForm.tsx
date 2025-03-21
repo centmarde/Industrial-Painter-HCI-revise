@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { 
   Box, 
   TextField, 
@@ -8,12 +9,15 @@ import {
   IconButton,
   FormControlLabel,
   Checkbox,
-  CircularProgress
+  CircularProgress,
+  Alert
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { Visibility, VisibilityOff, Email, Lock } from '@mui/icons-material';
 import { validateEmail, validateStrongPassword } from '../utils/Validator';
 import Oauth from '../common/Oauth';
+import { useAuth } from '../stores/Auth';
+import { showToast, toastMessages } from '../utils/toastConfig';
 
 const AnimatedButton = styled(Button)(({ theme }) => ({
   marginTop: theme.spacing(2),
@@ -68,8 +72,31 @@ const LoginForm = () => {
   });
   const [errors, setErrors] = useState({
     email: '',
-    password: ''
+    password: '',
+    auth: ''
   });
+  
+  const navigate = useNavigate();
+
+  // Wrap the useAuth call in a try-catch to handle the case where AuthProvider is missing
+  let login: (email: string, password: string) => Promise<any>;
+  try {
+    const auth = useAuth();
+    login = auth.login;
+  } catch (error) {
+    console.error('Auth Provider Error:', error);
+    // Show an error UI if the AuthProvider is missing
+    return (
+      <Box sx={{ mt: 2 }}>
+        <Alert severity="error">
+          Authentication provider not found. Please ensure that your application is wrapped with AuthProvider.
+          <Typography variant="caption" display="block" sx={{ mt: 1 }}>
+            Add {'<AuthProvider>...</AuthProvider>'} to your App component.
+          </Typography>
+        </Alert>
+      </Box>
+    );
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, checked } = e.target;
@@ -102,19 +129,18 @@ const LoginForm = () => {
   };
 
   const validateForm = () => {
-    const newErrors = { email: '', password: '' };
+    const newErrors = { email: '', password: '', auth: '' };
     let isValid = true;
     
     const emailError = validateEmail(formData.email);
-    const passwordError = validateStrongPassword(formData.password);
     
     if (emailError) {
       newErrors.email = emailError;
       isValid = false;
     }
     
-    if (passwordError) {
-      newErrors.password = passwordError;
+    if (!formData.password) {
+      newErrors.password = 'Password is required';
       isValid = false;
     }
     
@@ -127,14 +153,26 @@ const LoginForm = () => {
     
     if (validateForm()) {
       setIsLoading(true);
+      setErrors(prev => ({ ...prev, auth: '' }));
       
-      // Simulate API call
       try {
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        console.log('Login attempt with:', formData);
-        // Handle successful login here
-      } catch (error) {
+        await login(formData.email, formData.password);
+        console.log('Login successful');
+        showToast.success(toastMessages.loginSuccess);
+        // Navigate to home page after successful login
+        navigate('/home');
+      } catch (error: any) {
         console.error('Login error:', error);
+        let errorMessage = 'Login failed. Please try again.';
+        
+        if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+          errorMessage = 'Invalid email or password.';
+        } else if (error.code === 'auth/too-many-requests') {
+          errorMessage = 'Too many attempts. Please try again later.';
+        }
+        
+        setErrors(prev => ({ ...prev, auth: errorMessage }));
+        showToast.error(errorMessage);
       } finally {
         setIsLoading(false);
       }
@@ -143,6 +181,12 @@ const LoginForm = () => {
 
   return (
     <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
+      {errors.auth && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {errors.auth}
+        </Alert>
+      )}
+      
       <StyledTextField
         fullWidth
         id="email"
