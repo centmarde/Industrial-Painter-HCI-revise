@@ -15,6 +15,11 @@ import SocialPorpuse from './pages/AboutUs/SocialPorpuse'
 import PaintingBlog from './pages/AboutUs/PaintingBlog'
 import Diversity from './pages/AboutUs/Diversity'
 import Gmap from './pages/FindALocation/Gmap';
+import OurStory from './pages/Franchise/OurStory';
+import WhyFranchise from './pages/Franchise/WhyFranchise';
+import TheProcess from './pages/Franchise/TheProcess';
+import Investment from './pages/Franchise/Investment';
+import AvailableMarkets from './pages/Franchise/AvailableMarkets';
 // Import any other components or pages you have
 
 function App() {
@@ -44,6 +49,11 @@ function App() {
           <Route path="/about/blog" element={<PaintingBlog />} />
           <Route path="/about/diversity" element={<Diversity />} />
           <Route path="/locations" element={<Gmap />} />
+          <Route path="/franchise/our-story" element={<OurStory />} />
+          <Route path="/franchise/why-franchise" element={<WhyFranchise />} />
+          <Route path="/franchise/process" element={<TheProcess />} />
+          <Route path="/franchise/investment" element={<Investment />} />
+          <Route path="/franchise/markets" element={<AvailableMarkets />} />
           {/* Add more routes here as your application grows */}
           
           {/* Fallback for non-existent routes */}
