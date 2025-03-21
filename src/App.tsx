@@ -14,6 +14,7 @@ import WhyChooseUs from './pages/AboutUs/WhyChooseUs'
 import SocialPorpuse from './pages/AboutUs/SocialPorpuse'
 import PaintingBlog from './pages/AboutUs/PaintingBlog'
 import Diversity from './pages/AboutUs/Diversity'
+import Gmap from './pages/FindALocation/Gmap';
 // Import any other components or pages you have
 
 function App() {
@@ -42,6 +43,7 @@ function App() {
           <Route path="/about/social-purpose" element={<SocialPorpuse />} />
           <Route path="/about/blog" element={<PaintingBlog />} />
           <Route path="/about/diversity" element={<Diversity />} />
+          <Route path="/locations" element={<Gmap />} />
           {/* Add more routes here as your application grows */}
           
           {/* Fallback for non-existent routes */}
