@@ -86,3 +86,4 @@ export default tseslint.config({
   },
 })
 ```
+![CodeRabbit Pull Request Reviews](https://img.shields.io/coderabbit/prs/github/centmarde/Industrial-Painter-HCI-revise?utm_source=oss&utm_medium=github&utm_campaign=centmarde%2FIndustrial-Painter-HCI-revise&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews)
