@@ -19,6 +19,7 @@
     "@mui/icons-material": "^6.4.7",
     "@mui/material": "^6.4.7",
     "@mui/styled-engine-sc": "^6.4.6",
+    "@mui/system": "^6.4.8",
     "axios": "^1.8.3",
     "date-fns": "^4.1.0",
     "react": "^19.0.0",
@@ -28,6 +29,8 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
+    "@types/google.maps": "^3.58.1",
+    "@types/node": "^22.13.10",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
     "@vitejs/plugin-react": "^4.3.4",

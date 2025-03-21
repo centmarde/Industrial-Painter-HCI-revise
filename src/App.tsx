@@ -8,6 +8,18 @@ import ExteriorPainting from './pages/Residential Painting/ExteriorPainting';
 import InteriorPainting from './pages/Residential Painting/InteriorPainting';
 import Services from './pages/Outside/Services';
 import Reviews from './pages/Outside/Reviews';
+import NationalAccount from './pages/Outside/NationalAccount';
+import CaseStudies from './pages/Outside/CaseStudies';
+import WhyChooseUs from './pages/AboutUs/WhyChooseUs'
+import SocialPorpuse from './pages/AboutUs/SocialPorpuse'
+import PaintingBlog from './pages/AboutUs/PaintingBlog'
+import Diversity from './pages/AboutUs/Diversity'
+import Gmap from './pages/FindALocation/Gmap';
+import OurStory from './pages/Franchise/OurStory';
+import WhyFranchise from './pages/Franchise/WhyFranchise';
+import TheProcess from './pages/Franchise/TheProcess';
+import Investment from './pages/Franchise/Investment';
+import AvailableMarkets from './pages/Franchise/AvailableMarkets';
 // Import any other components or pages you have
 
 function App() {
@@ -30,6 +42,18 @@ function App() {
           <Route path="/residential/interior" element={<InteriorPainting />} />
           <Route path="/services" element={<Services />} />
           <Route path="/reviews" element={<Reviews />} />
+          <Route path="/commercial/national-account" element={<NationalAccount />} />
+          <Route path="/commercial/case-studies" element={<CaseStudies />} />
+          <Route path="/about/why-choose-us" element={<WhyChooseUs />} />
+          <Route path="/about/social-purpose" element={<SocialPorpuse />} />
+          <Route path="/about/blog" element={<PaintingBlog />} />
+          <Route path="/about/diversity" element={<Diversity />} />
+          <Route path="/locations" element={<Gmap />} />
+          <Route path="/franchise/our-story" element={<OurStory />} />
+          <Route path="/franchise/why-franchise" element={<WhyFranchise />} />
+          <Route path="/franchise/process" element={<TheProcess />} />
+          <Route path="/franchise/investment" element={<Investment />} />
+          <Route path="/franchise/markets" element={<AvailableMarkets />} />
           {/* Add more routes here as your application grows */}
           
           {/* Fallback for non-existent routes */}
