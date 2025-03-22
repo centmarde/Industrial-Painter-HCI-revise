@@ -13,7 +13,7 @@ interface PublicRouteGuardProps {
 
 const PublicRouteGuard = ({ 
   children, 
-  redirectPath = '/home' 
+  redirectPath = '/access-denied' 
 }: PublicRouteGuardProps) => {
   const { currentUser, loading } = useAuth();
   const storedUser = useUserStore(state => state.user);
