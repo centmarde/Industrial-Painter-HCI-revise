@@ -5,6 +5,8 @@ import { AuthProvider } from './stores/Auth';
 import AuthGuard from './auth/AuthGuard';
 import PublicRouteGuard from './auth/PublicRouteGuard';
 import { createPublicRoutes, createProtectedRoutes } from './auth/RouteGroups';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Login from './pages/Login';
 import Home from './pages/InsideContents/Home';
 import HeroLanding from './pages/index';
@@ -27,8 +29,11 @@ import AvailableMarkets from './pages/Franchise/AvailableMarkets';
 import PositionNearYou from './pages/Position/PositionNearYou';
 import Corporate from './pages/Position/Corporate';
 import AccessDenied from './pages/InsideContents/utils/AccessDenied';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import AccessDeniedOuter from './pages/AccessDeniedOuter';
+import NotFound from './pages/NotFound';
+import Consultation from './pages/InsideContents/Consultation';
+import ChatAiPage from './pages/InsideContents/ChatAiPage';
+import Quote from './pages/InsideContents/Quote';
 
 function App() {
   // Define public route configs
@@ -40,6 +45,9 @@ function App() {
   // Define protected route configs
   const protectedRoutes = [
     { path: '/home', element: <Home /> },
+    {path: '/home/consultation', element: <Consultation />},
+    {path: '/home/chat-with-ai', element: <ChatAiPage />},
+    {path: '/home/get-a-quote', element: <Quote />},
     // Add other protected routes here
   ];
 
@@ -55,7 +63,7 @@ function App() {
             
             {/* Access Denied Route */}
             <Route path="/access-denied" element={<AccessDenied />} />
-            
+            <Route path="/access-denied-outer" element={<AccessDeniedOuter />} />
             {/* Routes accessible to both authenticated and unauthenticated users */}
             <Route path="/residential/exterior" element={<ExteriorPainting />} />
             <Route path="/residential/interior" element={<InteriorPainting />} />
@@ -77,10 +85,10 @@ function App() {
             <Route path="/careers/corporate" element={<Corporate />} />
             
             {/* Generate all protected routes */}
-            {createProtectedRoutes(protectedRoutes, '/access-denied')}
+            {createProtectedRoutes(protectedRoutes, '/access-denied-outer')}
 
             {/* Fallback for non-existent routes */}
-            <Route path="*" element={<Navigate to="/" replace />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </Router>
       </ThemeProvider>

@@ -71,7 +71,7 @@ const CTASection: React.FC<CTASectionProps> = ({
     company: {
       title: 'Company',
       items: [
-        { name: 'About Us', href: '/about' },
+        { name: 'About Us', href: '/about/why-choose-us' },
         { name: 'Reviews', href: '/reviews' },
         { name: 'Careers', href: '/careers' },
         { name: 'Find a Location', href: '/locations' },
