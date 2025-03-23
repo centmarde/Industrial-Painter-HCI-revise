@@ -28,6 +28,7 @@ import PositionNearYou from './pages/Position/PositionNearYou';
 import Corporate from './pages/Position/Corporate';
 import AccessDenied from './pages/InsideContents/utils/AccessDenied';
 import AccessDeniedOuter from './pages/AccessDeniedOuter';
+import NotFound from './pages/NotFound';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -81,7 +82,7 @@ function App() {
             {createProtectedRoutes(protectedRoutes, '/access-denied-outer')}
 
             {/* Fallback for non-existent routes */}
-            <Route path="*" element={<Navigate to="/" replace />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </Router>
       </ThemeProvider>

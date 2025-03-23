@@ -82,15 +82,15 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   const logout = async () => {
-    await signOut(auth);
-    resetUser();
-    
-    // Add 3 seconds delay before navigation
-    setTimeout(() => {
+    try {
+      await signOut(auth);
+      resetUser();
+      // Only redirect after the signOut and resetUser operations are complete
       window.location.href = '/login';
-    }, 3000);
-    
-    return;
+    } catch (error) {
+      console.error('Logout error:', error);
+      throw error;
+    }
   };
 
   const value = {

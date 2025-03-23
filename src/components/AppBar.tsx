@@ -25,6 +25,8 @@ import { useThemeContext } from '../context/ThemeContext';
 import { createAppTheme } from '../theme/theme';
 import NavigationMenu from '../context/AppBarContext/NavigationMenu';
 import MobileAppBar from '../context/AppBarContext/MobileAppBar';
+// Import the useAuth hook
+import { useAuth } from '../stores/Auth';
 
 // Interface for props
 interface AppBarProps {
@@ -46,8 +48,8 @@ const AppBar: React.FC<AppBarProps> = ({ onToggle, sidebarCollapsed }) => {
   const isMobile = useMediaQuery('(max-width:768px)');
   const [mobileSidebarVisible, setMobileSidebarVisible] = useState(false);
   
-  // Get theme from context
-  const { mode } = useThemeContext();
+  // Get theme from context - change toggleColorMode to toggleTheme
+  const { mode, toggleTheme } = useThemeContext();
   const dynamicTheme = createAppTheme(mode);
   
   // Notifications state
@@ -149,6 +151,20 @@ const AppBar: React.FC<AppBarProps> = ({ onToggle, sidebarCollapsed }) => {
   
   const unreadCount = notifications.filter(notif => !notif.read).length;
 
+  // Get the logout function from Auth context
+  const { logout } = useAuth();
+
+  // Update the logout handler to use the actual logout function
+  const handleLogout = async () => {
+    try {
+      // Call the actual logout function from Auth context
+      await logout();
+    } catch (error) {
+      console.error('Logout failed:', error);
+      // You might want to show an error notification here
+    }
+  };
+
   return (
     <ThemeProvider theme={dynamicTheme}>
       {isMobile ? (
@@ -162,6 +178,8 @@ const AppBar: React.FC<AppBarProps> = ({ onToggle, sidebarCollapsed }) => {
           handleItemClick={handleItemClick}
           markAllAsRead={markAllAsRead}
           onToggleSidebar={handleToggleSidebar}
+          mode={mode}
+          toggleTheme={toggleTheme} // Pass toggleTheme instead of toggleColorMode
         />
       ) : (
         // Regular sidebar for desktop with improved padding
@@ -222,6 +240,9 @@ const AppBar: React.FC<AppBarProps> = ({ onToggle, sidebarCollapsed }) => {
                 selected={selected}
                 handleItemClick={handleItemClick}
                 theme={dynamicTheme}
+                mode={mode}
+                toggleTheme={toggleTheme} // Pass toggleTheme instead of toggleColorMode
+                handleLogout={handleLogout}
               />
               
               {/* Notifications section at the bottom */}

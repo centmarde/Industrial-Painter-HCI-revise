@@ -23,6 +23,10 @@ import HomeIcon from '@mui/icons-material/Home';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import NavigationMenu from './NavigationMenu';
 import { Theme } from '@mui/material/styles';
+// Import needed Firebase auth functions
+import { signOut } from 'firebase/auth';
+import { auth } from '../../lib/FirebaseConfig';
+import { useUserStore } from '../../stores/UserStore';
 
 // Notification item interface
 interface NotificationItem {
@@ -42,6 +46,8 @@ interface MobileAppBarProps {
   handleItemClick: (title: string) => void;
   markAllAsRead: () => void;
   onToggleSidebar: () => void;
+  mode?: 'light' | 'dark'; // Add mode prop
+  toggleTheme?: () => void; // Add toggleTheme prop
 }
 
 const MobileAppBar: React.FC<MobileAppBarProps> = ({
@@ -52,8 +58,13 @@ const MobileAppBar: React.FC<MobileAppBarProps> = ({
   unreadCount,
   handleItemClick,
   markAllAsRead,
-  onToggleSidebar
+  onToggleSidebar,
+  mode = 'light',
+  toggleTheme
 }) => {
+  // Get resetUser from UserStore
+  const resetUser = useUserStore(state => state.resetUser);
+  
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
   const [mobileNotificationsExpanded, setMobileNotificationsExpanded] = useState(true);
 
@@ -75,6 +86,22 @@ const MobileAppBar: React.FC<MobileAppBarProps> = ({
   const handleMobileItemClick = (title: string) => {
     handleItemClick(title);
     handleCloseDrawer();
+  };
+
+  // Update logout handler function to directly implement the provided logout function
+  const handleLogout = async () => {
+    // Close the drawer first
+    handleCloseDrawer();
+    
+    try {
+      await signOut(auth);
+      resetUser();
+      // Only redirect after the signOut and resetUser operations are complete
+      window.location.href = '/login';
+    } catch (error) {
+      console.error('Logout error:', error);
+      throw error;
+    }
   };
 
   return (
@@ -150,6 +177,9 @@ const MobileAppBar: React.FC<MobileAppBarProps> = ({
           selected={selected}
           handleItemClick={handleMobileItemClick}
           theme={theme}
+          mode={mode}
+          toggleTheme={toggleTheme}
+          handleLogout={handleLogout} // Pass the logout handler
         />
         
         {/* Mobile notifications section */}
