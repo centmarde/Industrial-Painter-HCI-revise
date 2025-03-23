@@ -27,6 +27,7 @@ import AvailableMarkets from './pages/Franchise/AvailableMarkets';
 import PositionNearYou from './pages/Position/PositionNearYou';
 import Corporate from './pages/Position/Corporate';
 import AccessDenied from './pages/InsideContents/utils/AccessDenied';
+import AccessDeniedOuter from './pages/AccessDeniedOuter';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -55,7 +56,7 @@ function App() {
             
             {/* Access Denied Route */}
             <Route path="/access-denied" element={<AccessDenied />} />
-            
+            <Route path="/access-denied-outer" element={<AccessDeniedOuter />} />
             {/* Routes accessible to both authenticated and unauthenticated users */}
             <Route path="/residential/exterior" element={<ExteriorPainting />} />
             <Route path="/residential/interior" element={<InteriorPainting />} />
@@ -77,7 +78,7 @@ function App() {
             <Route path="/careers/corporate" element={<Corporate />} />
             
             {/* Generate all protected routes */}
-            {createProtectedRoutes(protectedRoutes, '/access-denied')}
+            {createProtectedRoutes(protectedRoutes, '/access-denied-outer')}
 
             {/* Fallback for non-existent routes */}
             <Route path="*" element={<Navigate to="/" replace />} />

@@ -61,14 +61,20 @@ const MobileAppBar: React.FC<MobileAppBarProps> = ({
     setMobileNotificationsExpanded(!mobileNotificationsExpanded);
   };
 
+  // Fix the handleToggleSidebar function to avoid double toggling
   const handleToggleSidebar = () => {
+    // Only toggle drawer state locally, don't call parent toggle
     setMobileDrawerOpen(!mobileDrawerOpen);
-    onToggleSidebar();
+    // Don't call onToggleSidebar here - this was causing the loop
+  };
+
+  const handleCloseDrawer = () => {
+    setMobileDrawerOpen(false);
   };
 
   const handleMobileItemClick = (title: string) => {
     handleItemClick(title);
-    setMobileDrawerOpen(false);
+    handleCloseDrawer();
   };
 
   return (
@@ -120,7 +126,7 @@ const MobileAppBar: React.FC<MobileAppBarProps> = ({
       <Drawer
         anchor="right"
         open={mobileDrawerOpen}
-        onClose={() => setMobileDrawerOpen(false)}
+        onClose={handleCloseDrawer}
         sx={{
           '& .MuiDrawer-paper': {
             width: 240,

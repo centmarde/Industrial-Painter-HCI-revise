@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { ProSidebarProvider } from 'react-pro-sidebar';
 import { useState } from 'react';
 import AppBar from '../components/AppBar';
+import InsideNavbar from '../components/InsideNavbar';
 
 interface InsideLayoutProps {
   children: React.ReactNode;
@@ -17,7 +18,7 @@ const InsideLayout: React.FC<InsideLayoutProps> = ({ children }) => {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   
-  // Handle sidebar toggle from AppBar
+  // Handle sidebar toggle from either component
   const handleSidebarToggle = (collapsed: boolean) => {
     setSidebarCollapsed(collapsed);
   };
@@ -29,9 +30,12 @@ const InsideLayout: React.FC<InsideLayoutProps> = ({ children }) => {
         flexDirection: 'column',
         minHeight: '100vh'
       }}>
-        {/* Add AppBar with toggle callback */}
-        <AppBar onToggle={handleSidebarToggle} />
-        
+        {/* Pass both the toggle function and current state to both components */}
+        <AppBar 
+          onToggle={handleSidebarToggle} 
+          sidebarCollapsed={sidebarCollapsed}
+        />
+       
         {/* Main content area with dynamic padding based on sidebar state */}
         <Box component="main" sx={{ 
           flexGrow: 1,
@@ -42,6 +46,13 @@ const InsideLayout: React.FC<InsideLayoutProps> = ({ children }) => {
           },
           transition: 'padding-left 0.3s ease',
         }}>
+          {/* Only render InsideNavbar on non-mobile devices */}
+          {!isMobile && (
+            <InsideNavbar 
+              onToggle={handleSidebarToggle}
+              sidebarCollapsed={sidebarCollapsed}
+            />
+          )}
           {children}
         </Box>
         

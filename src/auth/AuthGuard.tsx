@@ -11,7 +11,7 @@ interface AuthGuardProps {
   fallbackPath?: string;
 }
 
-const AuthGuard = ({ children, fallbackPath = '/login' }: AuthGuardProps) => {
+const AuthGuard = ({ children, fallbackPath = '/access-denied-outer' }: AuthGuardProps) => {
   const { currentUser, loading } = useAuth();
   const storedUser = useUserStore(state => state.user);
   const [checking, setChecking] = useState(true);
