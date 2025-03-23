@@ -48,6 +48,8 @@ function App() {
     {path: '/home/consultation', element: <Consultation />},
     {path: '/home/chat-with-ai', element: <ChatAiPage />},
     {path: '/home/get-a-quote', element: <Quote />},
+    // {path: '/home/my-account', element: <MyAccount />}, 
+    // {path: '/home/my-quotes', element: <MyQuotes />},  
     // Add other protected routes here
   ];
 

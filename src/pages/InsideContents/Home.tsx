@@ -205,7 +205,7 @@ const Home = () => {
                   color="primary" 
                   size="large" 
                   fullWidth
-                  onClick={() => navigate('/careers')}
+                  onClick={() => navigate('/home/consultation')}
                 >
                   View Career Opportunities
                 </Button>
@@ -285,7 +285,7 @@ const Home = () => {
                   variant="outlined" 
                   color="primary"
                   sx={{ ml: 'auto' }}
-                  onClick={() => navigate('/about')}
+                  onClick={() => navigate('/about/why-choose-us')}
                 >
                   Learn More
                 </Button>

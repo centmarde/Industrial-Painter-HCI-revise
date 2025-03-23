@@ -207,7 +207,7 @@ const Quote = () => {
         
         // Navigate after 3 seconds
         setTimeout(() => {
-          navigate('/my-quotes');
+          navigate('/home/my-quotes');
         }, 3000);
       } else {
         // Handle error

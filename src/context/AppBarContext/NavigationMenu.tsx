@@ -14,11 +14,13 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
-  Button
+  Button,
+  Collapse
 } from '@mui/material';
 import { 
   Menu, 
-  MenuItem
+  MenuItem,
+  SubMenu
 } from 'react-pro-sidebar';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import ChatIcon from '@mui/icons-material/Chat';
@@ -30,6 +32,9 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import LogoutIcon from '@mui/icons-material/Logout';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+import ListAltIcon from '@mui/icons-material/ListAlt';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 
 // Define interface for menu item
@@ -39,6 +44,8 @@ export interface NavigationItem {
   onClick?: () => void;
   isUtility?: boolean;
   color?: string;
+  children?: NavigationItem[];
+  path?: string;
 }
 
 // Interface for the component props
@@ -55,13 +62,19 @@ interface NavigationMenuProps {
 
 // Menu items data structure for reuse
 export const menuItems: NavigationItem[] = [
-  { title: 'Get a Quote', icon: <ReceiptLongIcon /> },
-  { title: 'Chat with Ai', icon: <SmartToyIcon /> },
-  { title: 'Consultation', icon: <ChatIcon /> },
-  { title: 'My Account', icon: <AccountCircleIcon /> },
-  { title: 'Settings', icon: <SettingsIcon /> },
-  { title: 'Career', icon: <WorkIcon /> },
-  { title: 'Schedules', icon: <CalendarMonthIcon /> },
+  { title: 'Get a Quote', icon: <ReceiptLongIcon />, path: '/home/get-a-quote' },
+  { title: 'Chat with Ai', icon: <SmartToyIcon />, path: '/home/chat-with-ai' },
+  { title: 'Consultation', icon: <ChatIcon />, path: '/home/consultation' },
+  { 
+    title: 'Settings', 
+    icon: <SettingsIcon />, 
+    children: [
+      { title: 'My Account', icon: <AccountCircleIcon />, path: '/home/my-account' },
+      { title: 'My Quotes', icon: <ListAltIcon />, path: '/home/my-quotes' }
+    ]
+  },
+  { title: 'Career', icon: <WorkIcon />, path: '/home/career' },
+  { title: 'Schedules', icon: <CalendarMonthIcon />, path: '/home/schedules' },
 ];
 
 const NavigationMenu: React.FC<NavigationMenuProps> = ({
@@ -77,6 +90,8 @@ const NavigationMenu: React.FC<NavigationMenuProps> = ({
   const navigate = useNavigate();
   // Add state for logout confirmation dialog
   const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
+  // Add state for mobile submenu expansion
+  const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
   
   // Functions to handle dialog
   const openLogoutDialog = () => setLogoutDialogOpen(true);
@@ -96,14 +111,34 @@ const NavigationMenu: React.FC<NavigationMenuProps> = ({
     openLogoutDialog();
   };
 
+  // Function to toggle mobile submenu
+  const handleToggleSubmenu = (title: string) => {
+    setOpenSubmenu(openSubmenu === title ? null : title);
+  };
+
   // Function to handle navigation when menu item is clicked
-  const handleNavigation = (title: string) => {
-    // Call the original handleItemClick function
-    handleItemClick(title);
+  const handleNavigation = (item: NavigationItem) => {
+    // If item has children, toggle submenu instead of navigating (for mobile view)
+    if (isMobile && item.children) {
+      handleToggleSubmenu(item.title);
+      return;
+    }
     
-    // Navigate to the appropriate URL
-    const path = `/home/${title.toLowerCase().replace(/\s+/g, '-')}`;
-    navigate(path);
+    // For items without children, navigate directly
+    if (!item.children && item.path) {
+      // Call the original handleItemClick function
+      handleItemClick(item.title);
+      // Navigate to the path
+      navigate(item.path);
+    }
+  };
+
+  // Function to handle child item navigation
+  const handleChildNavigation = (childItem: NavigationItem, parentTitle: string) => {
+    if (childItem.path) {
+      handleItemClick(`${parentTitle} - ${childItem.title}`);
+      navigate(childItem.path);
+    }
   };
 
   // Create utility items for theme toggle and logout
@@ -130,25 +165,100 @@ const NavigationMenu: React.FC<NavigationMenuProps> = ({
           <PerfectScrollbar options={{ suppressScrollX: true, wheelPropagation: false }}>
             <List>
               {menuItems.map((item) => (
-                <ListItem key={item.title} disablePadding>
-                  <ListItemButton
-                    onClick={() => handleNavigation(item.title)}
-                    selected={selected === item.title}
-                    sx={{
-                      '&.Mui-selected': {
-                        backgroundColor: theme.palette.primary.light,
-                        color: theme.palette.primary.contrastText,
-                      },
-                      '&:hover': {
-                        backgroundColor: theme.palette.primary.light,
-                        color: theme.palette.primary.contrastText,
-                      },
-                    }}
-                  >
-                    <Box sx={{ mr: 2 }}>{item.icon}</Box>
-                    <ListItemText primary={item.title} />
-                  </ListItemButton>
-                </ListItem>
+                <React.Fragment key={item.title}>
+                  <ListItem disablePadding>
+                    <ListItemButton
+                      onClick={() => handleNavigation(item)}
+                      selected={selected === item.title}
+                      sx={{
+                        '&.Mui-selected': {
+                          backgroundColor: theme.palette.primary.light,
+                          color: theme.palette.primary.contrastText,
+                        },
+                        '&:hover': {
+                          backgroundColor: theme.palette.primary.light,
+                          color: theme.palette.primary.contrastText,
+                        },
+                      }}
+                    >
+                      <Box sx={{ mr: 2 }}>{item.icon}</Box>
+                      <ListItemText primary={item.title} />
+                      {item.children && (
+                        openSubmenu === item.title ? <ExpandLess /> : <ExpandMore />
+                      )}
+                    </ListItemButton>
+                  </ListItem>
+                  
+                  {/* Render children if any */}
+                  {item.children && (
+                    <Collapse in={openSubmenu === item.title} timeout="auto" unmountOnExit>
+                      <List 
+                        component="div" 
+                        disablePadding 
+                        sx={{ 
+                          overflowX: 'hidden',
+                          width: '100%',
+                          ml: 2.5 // Increased indentation
+                        }}
+                      >
+                        {item.children.map((child) => (
+                          <ListItem key={child.title} disablePadding>
+                            <ListItemButton
+                              sx={{ 
+                                pl: 2, // Reduced padding
+                                maxWidth: '100%',
+                                minHeight: '32px', // Smaller height
+                                '&.Mui-selected': {
+                                  backgroundColor: 'transparent', 
+                                  color: theme.palette.primary.main, 
+                                  fontWeight: 500,
+                                },
+                                '&:hover': {
+                                  backgroundColor: 'transparent',
+                                  color: theme.palette.primary.main,
+                                },
+                                borderLeft: selected === `${item.title} - ${child.title}` ? 
+                                  `1px solid ${theme.palette.primary.main}` : // Thinner border
+                                  '1px solid transparent',
+                              }}
+                              onClick={() => handleChildNavigation(child, item.title)}
+                              selected={selected === `${item.title} - ${child.title}`}
+                            >
+                              <Box sx={{ 
+                                mr: 1, // Smaller margin
+                                color: selected === `${item.title} - ${child.title}` 
+                                  ? theme.palette.primary.main
+                                  : theme.palette.primary.main, // Match parent color
+                                fontSize: '0.8rem', // Smaller icon
+                                display: 'flex',
+                                alignItems: 'center',
+                                '& > svg': {
+                                  fontSize: '0.9rem' // Explicitly size icons smaller
+                                }
+                              }}>
+                                {child.icon}
+                              </Box>
+                              <ListItemText 
+                                primary={child.title} 
+                                primaryTypographyProps={{
+                                  noWrap: true,
+                                  variant: 'body2',
+                                  sx: {
+                                    fontSize: '0.75rem', // Even smaller text
+                                    color: selected === `${item.title} - ${child.title}` 
+                                      ? theme.palette.primary.main 
+                                      : theme.palette.primary.main, // Match parent color
+                                    fontWeight: selected === `${item.title} - ${child.title}` ? 500 : 400
+                                  }
+                                }}
+                              />
+                            </ListItemButton>
+                          </ListItem>
+                        ))}
+                      </List>
+                    </Collapse>
+                  )}
+                </React.Fragment>
               ))}
               
               {/* Utility Items Section */}
@@ -228,28 +338,125 @@ const NavigationMenu: React.FC<NavigationMenuProps> = ({
             menuItemStyles={{
               button: ({ level, active }) => {
                 return {
-                  margin: collapsed ? '4px 0' : '6px 0', // Smaller margins for more compact layout
-                  padding: collapsed ? '10px 5px' : '10px 12px', // Reduced padding
-                  borderRadius: '6px', // Slightly smaller border radius
+                  margin: '0',
+                  padding: collapsed ? '10px 5px' : '10px 12px',
+                  borderRadius: '4px', // Reduced border radius for minimalism
                   backgroundColor: active ? theme.palette.primary.light : undefined,
                   '&:hover': {
                     backgroundColor: theme.palette.primary.light,
                     color: theme.palette.primary.contrastText,
                   },
-                  color: active ? theme.palette.primary.contrastText : undefined,
+                  color: active ? theme.palette.secondary.contrastText : undefined,
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
                 };
               },
+              subMenuContent: ({ level }) => ({
+                backgroundColor: 'transparent',
+                borderLeft: `1px solid ${mode === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'}`, // Subtle line to show hierarchy
+                marginLeft: collapsed ? 0 : '20px',
+                paddingLeft: 0,
+                boxShadow: 'none', // Remove shadow for minimalism
+                border: 'none', // Remove border
+                overflow: 'hidden',
+                overflowX: 'hidden',
+                maxWidth: '100%',
+               
+              }),
+              SubMenuExpandIcon: () => ({
+                color: theme.palette.text.secondary,
+                fontSize: '1rem', // Smaller icon
+              }),
+              label: () => ({
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+              }),
+            }}
+            rootStyles={{
+              overflow: 'hidden',
+              maxWidth: '100%'
             }}
           >
             {menuItems.map((item) => (
-              <MenuItem 
-                key={item.title}
-                icon={item.icon} 
-                onClick={() => handleNavigation(item.title)}
-                active={selected === item.title}
-              >
-                {item.title}
-              </MenuItem>
+              item.children ? (
+                <SubMenu
+                  key={item.title}
+                  label={item.title}
+                  icon={item.icon}
+                  defaultOpen={false}
+                  rootStyles={{
+                    ['& > .ps-menu-button']: {
+                      backgroundColor: 'transparent', // Remove background for minimalism
+                      maxWidth: '100%',
+                      overflow: 'hidden',
+                      transition: 'none', // Remove transition for cleaner look
+                    },
+                    maxWidth: '100%'
+                  }}
+                  onOpenChange={(open) => {
+                    if (open) {
+                      setOpenSubmenu(item.title);
+                    } else if (openSubmenu === item.title) {
+                      setOpenSubmenu(null);
+                    }
+                  }}
+                >
+                  {item.children.map((child) => (
+                    <MenuItem
+                      key={child.title}
+                      icon={child.icon}
+                      onClick={() => handleChildNavigation(child, item.title)}
+                      active={selected === `${item.title} - ${child.title}`}
+                      rootStyles={{
+                        margin: '2px 0', // Reduce vertical spacing for compact design
+                        padding: '6px 12px', // Reduce padding
+                        borderRadius: 0, // Remove border radius
+                        color: theme.palette.text.secondary, // Lower contrast for inactive
+                        borderLeft: selected === `${item.title} - ${child.title}` ?
+                          `2px solid ${theme.palette.primary.main}` : // Simple active indicator
+                          '2px solid transparent',
+                        backgroundColor: 'transparent', // No background
+                        maxWidth: '100%',
+                        overflow: 'hidden',
+                        ['& .ps-menu-icon']: {
+                          color: selected === `${item.title} - ${child.title}` 
+                            ? theme.palette.primary.main // Use primary color for selected
+                            : theme.palette.text.secondary, // Lighter color for non-selected
+                          minWidth: '24px',
+                          fontSize: '0.9rem', // Smaller icon
+                        },
+                        ['& .ps-menu-label']: {
+                          whiteSpace: 'nowrap',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          fontSize: '0.85rem', // Smaller text for minimalist
+                          fontWeight: selected === `${item.title} - ${child.title}` ? 500 : 400, // Slightly bold when active
+                          color: selected === `${item.title} - ${child.title}` 
+                            ? theme.palette.primary.main 
+                            : theme.palette.text.secondary,
+                        },
+                        '&:hover': {
+                          backgroundColor: 'transparent', // No hover effect
+                          color: theme.palette.primary.main, // Just change text color on hover
+                        }
+                      }}
+                    >
+                      {child.title}
+                    </MenuItem>
+                  ))}
+                </SubMenu>
+              ) : (
+                <MenuItem 
+                  key={item.title}
+                  icon={item.icon} 
+                  onClick={() => handleNavigation(item)}
+                  active={selected === item.title}
+                >
+                  {item.title}
+                </MenuItem>
+              )
             ))}
           </Menu>
           
