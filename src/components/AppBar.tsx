@@ -14,6 +14,7 @@ import {
   Sidebar, 
   useProSidebar
 } from 'react-pro-sidebar';
+import { useLocation } from 'react-router-dom'; // Add this import
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
@@ -42,9 +43,17 @@ interface NotificationItem {
   time: string;
 }
 
+// Map routes to menu items - add this outside the component
+const routeToMenuItemMap: Record<string, string> = {
+  '/home': 'Dashboard',
+  '/home/consultation': 'Consultation',
+  '/home/chat-with-ai': 'Chat with AI',
+  // Add more mappings as needed for your routes
+};
+
 const AppBar: React.FC<AppBarProps> = ({ onToggle, sidebarCollapsed }) => {
   const { collapseSidebar, collapsed } = useProSidebar();
-  const [selected, setSelected] = useState('Get a Quote');
+  const [selected, setSelected] = useState('Dashboard'); // Default to Dashboard
   const isMobile = useMediaQuery('(max-width:768px)');
   const [mobileSidebarVisible, setMobileSidebarVisible] = useState(false);
   
@@ -137,6 +146,19 @@ const AppBar: React.FC<AppBarProps> = ({ onToggle, sidebarCollapsed }) => {
     }
   };
 
+  // Get the current location from router
+  const location = useLocation();
+  
+  // Update selected item based on current route
+  useEffect(() => {
+    const currentPath = location.pathname;
+    const menuItem = routeToMenuItemMap[currentPath];
+    
+    if (menuItem) {
+      setSelected(menuItem);
+    }
+  }, [location]);
+
   const handleItemClick = (title: string) => {
     setSelected(title);
   };
@@ -224,7 +246,16 @@ const AppBar: React.FC<AppBarProps> = ({ onToggle, sidebarCollapsed }) => {
                 }}
               >
                 {!collapsed && (
-                  <Typography variant="h6" sx={{ fontWeight: 'bold', color: dynamicTheme.palette.primary.main, pl: 1 }}>
+                  <Typography 
+                    variant="h6" 
+                    sx={{ 
+                      fontWeight: 'bold', 
+                      color: dynamicTheme.palette.primary.main, 
+                      pl: 1,
+                      cursor: 'pointer'
+                    }}
+                    onClick={() => window.location.href = '/home'}
+                  >
                     Industrial Painter
                   </Typography>
                 )}

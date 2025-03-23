@@ -23,6 +23,7 @@
     "axios": "^1.8.3",
     "date-fns": "^4.1.0",
     "firebase": "^11.5.0",
+    "groq-sdk": "^0.17.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-perfect-scrollbar": "^1.5.8",

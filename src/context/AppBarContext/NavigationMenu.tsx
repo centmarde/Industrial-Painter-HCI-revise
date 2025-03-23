@@ -22,6 +22,7 @@ import {
 } from 'react-pro-sidebar';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import ChatIcon from '@mui/icons-material/Chat';
+import SmartToyIcon from '@mui/icons-material/SmartToy';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SettingsIcon from '@mui/icons-material/Settings';
 import WorkIcon from '@mui/icons-material/Work';
@@ -55,6 +56,7 @@ interface NavigationMenuProps {
 // Menu items data structure for reuse
 export const menuItems: NavigationItem[] = [
   { title: 'Get a Quote', icon: <ReceiptLongIcon /> },
+  { title: 'Chat with Ai', icon: <SmartToyIcon /> },
   { title: 'Consultation', icon: <ChatIcon /> },
   { title: 'My Account', icon: <AccountCircleIcon /> },
   { title: 'Settings', icon: <SettingsIcon /> },

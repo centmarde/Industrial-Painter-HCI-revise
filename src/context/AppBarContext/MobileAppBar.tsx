@@ -123,7 +123,7 @@ const MobileAppBar: React.FC<MobileAppBarProps> = ({
               underline="hover"
               sx={{ display: 'flex', alignItems: 'center' }}
               color="inherit"
-              href="/"
+              href="/home"
             >
               <HomeIcon sx={{ mr: 0.5 }} fontSize="inherit" />
               Home

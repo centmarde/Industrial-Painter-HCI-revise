@@ -1,4 +1,4 @@
-import { Box, Typography, Container, Paper, Button, Grid, Divider } from '@mui/material';
+import { Box, Typography, Container, Paper, Button, Grid, Divider, useTheme, useMediaQuery } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import WorkIcon from '@mui/icons-material/Work';
@@ -14,6 +14,8 @@ import StatCard from '../../components/dashboard/StatCard';
 const Home = () => {
   const user = useUserStore(state => state.user);
   const navigate = useNavigate();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   
   // Using the fluctuation hook for all counters
   const activeUsers = useCounterWithFluctuation(
@@ -73,18 +75,26 @@ const Home = () => {
             }}
           >
             <Typography 
-              variant="h3" 
+              variant={isMobile ? "h4" : "h3"} 
               component="h1" 
               gutterBottom
               sx={{ 
                 fontWeight: 700,
-                color: (theme) => theme.custom.darkest
+                color: (theme) => theme.custom.darkest,
+                fontSize: isMobile ? '1.75rem' : undefined,
+                lineHeight: isMobile ? 1.2 : undefined
               }}
             >
               Welcome to Industrial Painter, {user?.displayName || 'User'}!
             </Typography>
             
-            <Typography variant="h6" sx={{ mb: 2 }}>
+            <Typography 
+              variant={isMobile ? "body1" : "h6"} 
+              sx={{ 
+                mb: 2,
+                fontSize: isMobile ? '0.95rem' : undefined
+              }}
+            >
               Your professional platform for industrial painting services and career opportunities
             </Typography>
             
@@ -165,8 +175,15 @@ const Home = () => {
                 }}
               >
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                  <WorkIcon sx={{ fontSize: 40, color: (theme) => theme.custom.darkest, mr: 2 }} />
-                  <Typography variant="h4" component="h2">
+                  <WorkIcon sx={{ fontSize: isMobile ? 32 : 40, color: (theme) => theme.custom.darkest, mr: 2 }} />
+                  <Typography 
+                    variant={isMobile ? "h5" : "h4"} 
+                    component="h2"
+                    sx={{ 
+                      fontSize: isMobile ? '1.4rem' : undefined,
+                      lineHeight: isMobile ? 1.3 : undefined
+                    }}
+                  >
                     Explore Careers
                   </Typography>
                 </Box>
@@ -210,8 +227,15 @@ const Home = () => {
                 }}
               >
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                  <CalendarMonthIcon sx={{ fontSize: 40, color: (theme) => theme.custom.darkest, mr: 2 }} />
-                  <Typography variant="h4" component="h2">
+                  <CalendarMonthIcon sx={{ fontSize: isMobile ? 32 : 40, color: (theme) => theme.custom.darkest, mr: 2 }} />
+                  <Typography 
+                    variant={isMobile ? "h5" : "h4"} 
+                    component="h2"
+                    sx={{ 
+                      fontSize: isMobile ? '1.4rem' : undefined,
+                      lineHeight: isMobile ? 1.3 : undefined
+                    }}
+                  >
                     Schedule Appointments
                   </Typography>
                 </Box>
