@@ -13,12 +13,15 @@ import {
   ListItemText,
   Tabs,
   Divider,
-  Typography
+  Typography,
+  Button,
+  Menu,
+  MenuItem
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Logo from '../common/Logo';
 import DarkModeToggle from './DarkModeToggle';
 import SubmenuDropdown, { SubMenuItem } from '../common/SubmenuDropdown';
@@ -82,7 +85,12 @@ const navItems: NavItem[] = [
   { label: 'login', path: '/login' },
 ];
 
-const OutsideNavbar: React.FC = () => {
+interface OutsideNavbarProps {
+  isAuthenticated: boolean;
+  onDashboardClick: () => void;
+}
+
+const OutsideNavbar: React.FC<OutsideNavbarProps> = ({ isAuthenticated, onDashboardClick }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('lg'));
   const isSmallMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -106,6 +114,16 @@ const OutsideNavbar: React.FC = () => {
     scrollToTop();
   };
 
+  // Replace the login nav item with dashboard when authenticated
+  const modifiedNavItems = navItems.map(item => {
+    if (item.label.toLowerCase() === 'login') {
+      return isAuthenticated 
+        ? { label: 'dashboard', path: '/home' } 
+        : item;
+    }
+    return item;
+  });
+
   const drawer = (
     <Box sx={{ textAlign: 'center', p: 2, height: '100%', display: 'flex', flexDirection: 'column' }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
@@ -117,7 +135,7 @@ const OutsideNavbar: React.FC = () => {
       <Divider sx={{ mb: 2 }} />
       
       <List sx={{ flexGrow: 1 }}>
-        {navItems.map((item) => (
+        {modifiedNavItems.map((item) => (
           <ListItem 
             key={item.label} 
             sx={{ 
@@ -128,12 +146,24 @@ const OutsideNavbar: React.FC = () => {
               flexDirection: 'column'
             }}
           >
-            <SubmenuDropdown
-              label={item.label}
-              path={item.path}
-              children={item.children}
-              onClose={handleNavItemClick}
-            />
+            {item.label === 'Go to Dashboard' ? (
+              <Button 
+                onClick={() => {
+                  onDashboardClick();
+                  handleNavItemClick();
+                }}
+                sx={{ width: '100%' }}
+              >
+                {item.label}
+              </Button>
+            ) : (
+              <SubmenuDropdown
+                label={item.label}
+                path={item.path}
+                children={item.children}
+                onClose={handleNavItemClick}
+              />
+            )}
           </ListItem>
         ))}
         
@@ -197,15 +227,30 @@ const OutsideNavbar: React.FC = () => {
                     height: '100%'
                   }
                 }}>
-                  {navItems.map((item) => (
-                    <SubmenuDropdown 
-                      key={item.label} 
-                      label={item.label} 
-                      path={item.path}
-                      children={item.children}
-                      isTabItem
-                      onClose={scrollToTop}
-                    />
+                  {modifiedNavItems.map((item) => (
+                    item.label === 'Go to Dashboard' ? (
+                      <Button 
+                        key={item.label}
+                        onClick={onDashboardClick}
+                        sx={{ 
+                          height: '100%',
+                          display: 'flex',
+                          alignItems: 'center',
+                          px: 2
+                        }}
+                      >
+                        {item.label}
+                      </Button>
+                    ) : (
+                      <SubmenuDropdown 
+                        key={item.label} 
+                        label={item.label} 
+                        path={item.path}
+                        children={item.children}
+                        isTabItem
+                        onClose={scrollToTop}
+                      />
+                    )
                   ))}
                 </Box>
               </Box>

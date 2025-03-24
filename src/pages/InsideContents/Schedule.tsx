@@ -300,7 +300,7 @@ const Schedule: React.FC = () => {
                   display="flex" 
                   justifyContent="center" 
                   alignItems="center" 
-                  height="400px"
+                  height="auto"
                 > 
                   <Typography variant="body1" color="textSecondary">
                     No interviews scheduled for this date
