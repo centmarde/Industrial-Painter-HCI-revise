@@ -34,7 +34,8 @@ import NotFound from './pages/NotFound';
 import Consultation from './pages/InsideContents/Consultation';
 import ChatAiPage from './pages/InsideContents/ChatAiPage';
 import Quote from './pages/InsideContents/Quote';
-
+import Career from './pages/InsideContents/Career';
+import Schedule from './pages/InsideContents/Schedule';
 function App() {
   // Define public route configs
   const publicRoutes = [
@@ -48,6 +49,8 @@ function App() {
     {path: '/home/consultation', element: <Consultation />},
     {path: '/home/chat-with-ai', element: <ChatAiPage />},
     {path: '/home/get-a-quote', element: <Quote />},
+    {path: '/home/career', element: <Career />},
+    {path: '/home/schedules', element: <Schedule />},
     // {path: '/home/my-account', element: <MyAccount />}, 
     // {path: '/home/my-quotes', element: <MyQuotes />},  
     // Add other protected routes here

@@ -9,7 +9,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import DarkModeToggle from './DarkModeToggle';
 import { useUserStore } from '../stores/UserStore';
-import { Avatar, Divider } from '@mui/material';
+import { Avatar, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider } from '@mui/material';
 import { useAuth } from '../stores/Auth';
 
 interface MenuAppBarProps {
@@ -20,6 +20,7 @@ interface MenuAppBarProps {
 export default function MenuAppBar({ onToggle, sidebarCollapsed = false }: MenuAppBarProps) {
   const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [logoutDialogOpen, setLogoutDialogOpen] = React.useState(false);
   const { user } = useUserStore();
   const { logout } = useAuth();
 
@@ -32,8 +33,17 @@ export default function MenuAppBar({ onToggle, sidebarCollapsed = false }: MenuA
   };
 
   const handleLogout = () => {
-    logout();
+    setLogoutDialogOpen(true);
     handleClose();
+  };
+
+  const handleConfirmLogout = () => {
+    logout();
+    setLogoutDialogOpen(false);
+  };
+
+  const handleCancelLogout = () => {
+    setLogoutDialogOpen(false);
   };
 
   const handleSidebarToggle = () => {
@@ -105,6 +115,29 @@ export default function MenuAppBar({ onToggle, sidebarCollapsed = false }: MenuA
           )}
         </Toolbar>
       </AppBar>
+
+      {/* Logout confirmation dialog */}
+      <Dialog
+        open={logoutDialogOpen}
+        onClose={handleCancelLogout}
+        aria-labelledby="logout-dialog-title"
+        aria-describedby="logout-dialog-description"
+      >
+        <DialogTitle id="logout-dialog-title">
+          Confirm Logout
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="logout-dialog-description">
+            Are you sure you want to log out of your account?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCancelLogout}>Cancel</Button>
+          <Button onClick={handleConfirmLogout} color="primary" autoFocus>
+            Logout
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 }
