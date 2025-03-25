@@ -3,6 +3,7 @@ import { persist } from 'zustand/middleware';
 import { User } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../lib/FirebaseConfig';
+import { Quote, fetchQuotesByUserId } from '../pages/InsideContents/services/SettingsQuotes';
 
 // Define what we want to store from the User object
 interface StoredUser {
@@ -24,9 +25,13 @@ interface FirestoreUserData {
 interface UserStore {
   user: User | null;
   firestoreUserData: FirestoreUserData | null;
+  quotes: Quote[];
+  loading: boolean;
+  error: string | null;
   setUser: (user: User | null) => void;
   resetUser: () => void;
   fetchFirestoreUserData: (uid: string) => Promise<void>;
+  fetchUserQuotes: () => Promise<void>;
 }
 
 // Function to extract required user properties
@@ -49,6 +54,9 @@ export const useUserStore = create<UserStore>()(
     (set, get) => ({
       user: null,
       firestoreUserData: null,
+      quotes: [],
+      loading: false,
+      error: null,
       setUser: (user) => {
         console.log('Setting user:', user ? {
           uid: user.uid,
@@ -84,6 +92,22 @@ export const useUserStore = create<UserStore>()(
           console.error('Error fetching Firestore user data:', error);
           set({ firestoreUserData: null });
         }
+      },
+      fetchUserQuotes: async () => {
+        const { user } = get();
+        if (!user) {
+          set({ error: 'No user logged in' });
+          return;
+        }
+        
+        set({ loading: true, error: null });
+        try {
+          const quotes = await fetchQuotesByUserId(user.uid);
+          set({ quotes, loading: false });
+        } catch (error) {
+          console.error('Error fetching user quotes:', error);
+          set({ error: 'Failed to fetch quotes', loading: false });
+        }
       }
     }),
     {
@@ -92,6 +116,7 @@ export const useUserStore = create<UserStore>()(
       partialize: (state) => ({
         user: extractUserProperties(state.user),
         firestoreUserData: state.firestoreUserData
+        // We don't persist quotes, as they will be fetched fresh each time
       }),
       // Add merge function to handle the stored data properly
       merge: (persistedState, currentState) => {

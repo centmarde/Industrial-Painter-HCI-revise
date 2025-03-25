@@ -37,6 +37,7 @@ import Quote from './pages/InsideContents/Quote';
 import Career from './pages/InsideContents/Career';
 import Schedule from './pages/InsideContents/Schedule';
 import MyAccount from './pages/InsideContents/settings/MyAccountPage';
+import MyQuotes from './pages/InsideContents/settings/MyQuotes';
 function App() {
   // Define public route configs
   const publicRoutes = [
@@ -53,7 +54,7 @@ function App() {
     {path: '/home/career', element: <Career />},
     {path: '/home/schedules', element: <Schedule />},
     {path: '/settings/my-account', element: <MyAccount />}, 
-    // {path: '/home/my-quotes', element: <MyQuotes />},  
+    {path: '/settings/my-quotes', element: <MyQuotes />},  
     // Add other protected routes here
   ];
 
