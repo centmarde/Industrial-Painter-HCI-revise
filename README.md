@@ -16,7 +16,9 @@ A professional painting services management application built with modern web te
   <img src="https://img.shields.io/badge/Zustand-000000?style=for-the-badge&logo=zustand&logoColor=white" alt="Zustand" />
   <img src="https://img.shields.io/badge/Styled_Components-DB7093?style=for-the-badge&logo=styled-components&logoColor=white" alt="Styled Components" />
   <img src="https://img.shields.io/badge/FortAwesome-528DD7?style=for-the-badge&logo=font-awesome&logoColor=white" alt="Font Awesome" />
+  <img src="https://img.shields.io/badge/Material_Design_Icons-2196F3?style=for-the-badge&logo=material-design-icons&logoColor=white" alt="MDI Font" />
   <img src="https://img.shields.io/badge/React_Toastify-FFC107?style=for-the-badge&logo=react&logoColor=black" alt="React Toastify" />
+
 </div>
 
 - **React 19** - Modern UI library for building component-based interfaces
@@ -29,8 +31,13 @@ A professional painting services management application built with modern web te
 - **Zustand** - Lightweight state management solution
 - **Styled Components** - Visual primitives for the component age
 - **Font Awesome** - Scalable vector icons that can be customized
+- **MDI Font** - Material Design Icons font package
+- **MUI X Date Pickers** - Date and time picker components for Material UI
+- **React Pro Sidebar** - Customizable sidebar component for React
+- **React Perfect Scrollbar** - Custom scrollbar component for React
 - **React Toastify** - Notification system for React applications
 - **date-fns** - Modern JavaScript date utility library
+- **dayjs** - Fast 2kB alternative to Moment.js with the same modern API
 
 ## Features
 
