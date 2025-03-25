@@ -39,7 +39,10 @@ const NotFound = () => {
           sx={{ 
             mb: 0,
             position: 'relative',
-            top: '-100px',
+            top: {
+              xs: '-20px',  // Mobile view (-20px)
+              sm: '-100px'  // Tablet and above (-100px)
+            },
             width: '100%'
           }}
         >
@@ -52,7 +55,10 @@ const NotFound = () => {
           onClick={() => navigate('/home')}
           sx={{ 
             position: 'relative',
-            top: '-80px',
+            top:  {
+              xs: '-10px',  // Mobile view (-20px)
+              sm: '-80px'  // Tablet and above (-100px)
+            },
             px: 3,
             py: 1
           }}
