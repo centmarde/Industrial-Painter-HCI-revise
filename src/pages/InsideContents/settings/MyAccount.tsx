@@ -75,6 +75,7 @@ const MyAccount = () => {
   });
   
   const [loading, setLoading] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true); // New state for initial loading
   const [alertMessage, setAlertMessage] = useState('');
   const [alertType, setAlertType] = useState<'success' | 'error'>('success');
   const [openAlert, setOpenAlert] = useState(false);
@@ -84,6 +85,7 @@ const MyAccount = () => {
   // Load user data on component mount
   useEffect(() => {
     const fetchUserData = async () => {
+      setInitialLoading(true); // Set initial loading state to true
       setLoading(true);
       try {
         // First check if we have a user in the store
@@ -134,6 +136,7 @@ const MyAccount = () => {
         }
       } finally {
         setLoading(false);
+        setInitialLoading(false); // Set initial loading to false when done
       }
     };
 
@@ -198,7 +201,7 @@ const MyAccount = () => {
         displayName: user.displayName,
         phoneNumber: user.phoneNumber,
         bio: user.bio,
-        // Don't need to update photoURL here as it's handled by the upload function
+        photoURL: photoURL || user.photoURL, // Update photoURL in Firestore
         updatedAt: new Date(),
       });
       
@@ -218,6 +221,10 @@ const MyAccount = () => {
         
         // Update the user in the Zustand store
         setStoreUser(auth.currentUser);
+        
+        // Refresh the Firestore user data in the store
+        const fetchFirestoreUserData = useUserStore.getState().fetchFirestoreUserData;
+        await fetchFirestoreUserData(auth.currentUser.uid);
       }
       
       showAlert('success', 'Profile updated successfully!');
@@ -240,138 +247,154 @@ const MyAccount = () => {
 
   return (
     <Box sx={{ width: '100%', maxWidth: 1100, mx: 'auto', my: 10 }}>
-     
-      
-      <Paper elevation={3} sx={{ mb: 4 }}>
-        <Tabs 
-          value={tabValue}
-          onChange={handleTabChange} 
-          aria-label="account tabs"
-          sx={{ borderBottom: 1, borderColor: 'divider' }}
-        >
-          <Tab 
-            label={<Box sx={{ display: 'flex', alignItems: 'center' }}><AccountCircleIcon sx={{ mr: 1 }} />Profile</Box>} 
-            id="account-tab-0" 
-            aria-controls="account-tabpanel-0" 
-          />
-          <Tab 
-           label={<Box sx={{ display: 'flex', alignItems: 'center' }}><LockIcon sx={{ mr: 1 }} />Security</Box>} 
-            id="account-tab-1" 
-            aria-controls="account-tabpanel-1" 
-          />
-        </Tabs>
-        
-        <TabPanel value={tabValue} index={0}>
-          <Grid container spacing={4}>
-            <Grid item xs={12} md={4} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <Avatar 
-                src={photoPreview || user.photoURL} 
-                alt={user.displayName}
-                sx={{ width: 150, height: 150, mb: 3, boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
+      {initialLoading ? (
+        <Box sx={{ 
+          display: 'flex', 
+          justifyContent: 'center', 
+          alignItems: 'center', 
+          height: '400px', 
+          flexDirection: 'column',
+          gap: 3 
+        }}>
+          <CircularProgress size={60} />
+          <Typography variant="h6" color="text.secondary">
+            Loading profile information...
+          </Typography>
+        </Box>
+      ) : (
+        <>
+          <Paper elevation={3} sx={{ mb: 4 }}>
+            <Tabs 
+              value={tabValue}
+              onChange={handleTabChange} 
+              aria-label="account tabs"
+              sx={{ borderBottom: 1, borderColor: 'divider' }}
+            >
+              <Tab 
+                label={<Box sx={{ display: 'flex', alignItems: 'center' }}><AccountCircleIcon sx={{ mr: 1 }} />Profile</Box>} 
+                id="account-tab-0" 
+                aria-controls="account-tabpanel-0" 
               />
-              
-              <Button
-                component="label"
-                variant="outlined"
-                startIcon={<PhotoCameraIcon />}
-                size="small"
-                sx={{ mb: 3, borderRadius: '24px', px: 2 }}
-              >
-                Change Photo
-                <VisuallyHiddenInput type="file" accept="image/*" onChange={handlePhotoChange} />
-              </Button>
-              
-              <Typography variant="body2" color="text.secondary" align="center" sx={{ mt: 2, px: 2 }}>
-                Upload a professional profile photo to enhance your profile
-              </Typography>
-            </Grid>
+              <Tab 
+               label={<Box sx={{ display: 'flex', alignItems: 'center' }}><LockIcon sx={{ mr: 1 }} />Security</Box>} 
+                id="account-tab-1" 
+                aria-controls="account-tabpanel-1" 
+              />
+            </Tabs>
             
-            <Grid item xs={12} md={8}>
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-                <TextField
-                  fullWidth
-                  label="Display Name"
-                  name="displayName"
-                  value={user.displayName}
-                  onChange={handleInputChange}
-                  variant="outlined"
-                  error={!!validateName(user.displayName)}
-                  helperText={validateName(user.displayName) || ""}
-                  sx={{ '& .MuiOutlinedInput-root': { borderRadius: '8px' } }}
-                />
+            <TabPanel value={tabValue} index={0}>
+              <Grid container spacing={4}>
+                <Grid item xs={12} md={4} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                  <Avatar 
+                    src={photoPreview || user.photoURL} 
+                    alt={user.displayName}
+                    sx={{ width: 150, height: 150, mb: 3, boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
+                  />
+                  
+                  <Button
+                    component="label"
+                    variant="outlined"
+                    startIcon={<PhotoCameraIcon />}
+                    size="small"
+                    sx={{ mb: 3, borderRadius: '24px', px: 2 }}
+                  >
+                    Change Photo
+                    <VisuallyHiddenInput type="file" accept="image/*" onChange={handlePhotoChange} />
+                  </Button>
+                  
+                  <Typography variant="body2" color="text.secondary" align="center" sx={{ mt: 2, px: 2 }}>
+                    Upload a professional profile photo to enhance your profile
+                  </Typography>
+                </Grid>
                 
-                <TextField
-                  fullWidth
-                  label="Email"
-                  name="email"
-                  value={user.email}
-                  disabled
-                  variant="outlined"
-                  helperText="Email cannot be changed"
-                  sx={{ '& .MuiOutlinedInput-root': { borderRadius: '8px' } }}
-                />
+                <Grid item xs={12} md={8}>
+                  <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                    <TextField
+                      fullWidth
+                      label="Display Name"
+                      name="displayName"
+                      value={user.displayName}
+                      onChange={handleInputChange}
+                      variant="outlined"
+                      error={!!validateName(user.displayName)}
+                      helperText={validateName(user.displayName) || ""}
+                      sx={{ '& .MuiOutlinedInput-root': { borderRadius: '8px' } }}
+                    />
+                    
+                    <TextField
+                      fullWidth
+                      label="Email"
+                      name="email"
+                      value={user.email}
+                      disabled
+                      variant="outlined"
+                      helperText="Email cannot be changed"
+                      sx={{ '& .MuiOutlinedInput-root': { borderRadius: '8px' } }}
+                    />
+                    
+                    <TextField
+                      fullWidth
+                      label="Phone Number"
+                      name="phoneNumber"
+                      value={user.phoneNumber}
+                      onChange={handleInputChange}
+                      variant="outlined"
+                      sx={{ '& .MuiOutlinedInput-root': { borderRadius: '8px' } }}
+                    />
+                    
+                    <TextField
+                      fullWidth
+                      multiline
+                      rows={3}
+                      label="Bio"
+                      name="bio"
+                      value={user.bio}
+                      onChange={handleInputChange}
+                      variant="outlined"
+                      placeholder="Tell us a bit about yourself"
+                      sx={{ '& .MuiOutlinedInput-root': { borderRadius: '8px' } }}
+                    />
+                  </Box>
+                </Grid>
                 
-                <TextField
-                  fullWidth
-                  label="Phone Number"
-                  name="phoneNumber"
-                  value={user.phoneNumber}
-                  onChange={handleInputChange}
-                  variant="outlined"
-                  sx={{ '& .MuiOutlinedInput-root': { borderRadius: '8px' } }}
-                />
-                
-                <TextField
-                  fullWidth
-                  multiline
-                  rows={3}
-                  label="Bio"
-                  name="bio"
-                  value={user.bio}
-                  onChange={handleInputChange}
-                  variant="outlined"
-                  placeholder="Tell us a bit about yourself"
-                  sx={{ '& .MuiOutlinedInput-root': { borderRadius: '8px' } }}
-                />
-              </Box>
-            </Grid>
+                <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    startIcon={<SaveIcon />}
+                    onClick={updateProfile}
+                    disabled={loading}
+                    sx={{ 
+                      borderRadius: '24px', 
+                      px: 4,
+                      py: 1,
+                      textTransform: 'none',
+                      fontWeight: 'bold',
+                      boxShadow: 2
+                    }}
+                  >
+                    {loading ? <CircularProgress size={24} /> : 'Save Changes'}
+                  </Button>
+                </Grid>
+              </Grid>
+            </TabPanel>
             
-            <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
-              <Button
-                variant="contained"
-                color="primary"
-                startIcon={<SaveIcon />}
-                onClick={updateProfile}
-                disabled={loading}
-                sx={{ 
-                  borderRadius: '24px', 
-                  px: 4,
-                  py: 1,
-                  textTransform: 'none',
-                  fontWeight: 'bold',
-                  boxShadow: 2
-                }}
-              >
-                {loading ? <CircularProgress size={24} /> : 'Save Changes'}
-              </Button>
-            </Grid>
-          </Grid>
-        </TabPanel>
-        
-        <TabPanel value={tabValue} index={1}>
-          <SecurityTab 
-            loading={loading}
-            setLoading={setLoading}
-            showAlert={showAlert}
-          />
-        </TabPanel>
-      </Paper>
-      
-      <Snackbar open={openAlert} autoHideDuration={6000} onClose={handleCloseAlert}>
-        <Alert onClose={handleCloseAlert} severity={alertType} sx={{ width: '100%' }}>
-          {alertMessage}
-        </Alert>
-      </Snackbar>
+            <TabPanel value={tabValue} index={1}>
+              <SecurityTab 
+                loading={loading}
+                setLoading={setLoading}
+                showAlert={showAlert}
+              />
+            </TabPanel>
+          </Paper>
+          
+          <Snackbar open={openAlert} autoHideDuration={6000} onClose={handleCloseAlert}>
+            <Alert onClose={handleCloseAlert} severity={alertType} sx={{ width: '100%' }}>
+              {alertMessage}
+            </Alert>
+          </Snackbar>
+        </>
+      )}
     </Box>
   );
 };

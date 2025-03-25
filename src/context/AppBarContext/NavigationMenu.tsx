@@ -69,8 +69,8 @@ export const menuItems: NavigationItem[] = [
     title: 'Settings', 
     icon: <SettingsIcon />, 
     children: [
-      { title: 'My Account', icon: <AccountCircleIcon />, path: '/home/my-account' },
-      { title: 'My Quotes', icon: <ListAltIcon />, path: '/home/my-quotes' }
+      { title: 'My Account', icon: <AccountCircleIcon />, path: '/settings/my-account' },
+      { title: 'My Quotes', icon: <ListAltIcon />, path: '/settings/my-quotes' }
     ]
   },
   { title: 'Career', icon: <WorkIcon />, path: '/home/career' },

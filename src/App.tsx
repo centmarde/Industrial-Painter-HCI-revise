@@ -52,7 +52,7 @@ function App() {
     {path: '/home/get-a-quote', element: <Quote />},
     {path: '/home/career', element: <Career />},
     {path: '/home/schedules', element: <Schedule />},
-    {path: '/home/my-account', element: <MyAccount />}, 
+    {path: '/settings/my-account', element: <MyAccount />}, 
     // {path: '/home/my-quotes', element: <MyQuotes />},  
     // Add other protected routes here
   ];
