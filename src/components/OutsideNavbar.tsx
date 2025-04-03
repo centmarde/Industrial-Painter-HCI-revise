@@ -124,8 +124,26 @@ const OutsideNavbar: React.FC<OutsideNavbarProps> = ({ isAuthenticated, onDashbo
     return item;
   });
 
+  // Font size for tab items
+  const tabFontSize = '0.75rem'; // Smaller font size for tabs
+  
+  // Add a custom style to override font size globally for menu items
+  const fontStyles = {
+    '& .MuiTypography-root': { fontSize: tabFontSize },
+    '& .MuiButtonBase-root': { fontSize: tabFontSize },
+    '& .MuiButton-root': { fontSize: tabFontSize },
+    '& .menu-label': { fontSize: tabFontSize }
+  };
+
   const drawer = (
-    <Box sx={{ textAlign: 'center', p: 2, height: '100%', display: 'flex', flexDirection: 'column' }}>
+    <Box sx={{ 
+      textAlign: 'center', 
+      p: 2, 
+      height: '100%', 
+      display: 'flex', 
+      flexDirection: 'column',
+      ...fontStyles // Apply font styles to the entire drawer
+    }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
         <Logo size="small" />
         <IconButton edge="end" color="inherit" aria-label="close" onClick={handleDrawerToggle}>
@@ -152,7 +170,7 @@ const OutsideNavbar: React.FC<OutsideNavbarProps> = ({ isAuthenticated, onDashbo
                   onDashboardClick();
                   handleNavItemClick();
                 }}
-                sx={{ width: '100%' }}
+                sx={{ width: '100%', fontSize: tabFontSize, textTransform: 'none' }}
               >
                 {item.label}
               </Button>
@@ -217,7 +235,8 @@ const OutsideNavbar: React.FC<OutsideNavbarProps> = ({ isAuthenticated, onDashbo
                 alignItems: 'center',
                 justifyContent: 'flex-end',
                 flexGrow: 1,
-                pr: 8 // Add padding-right to give space for the absolute-positioned toggle
+                pr: 8,
+                ...fontStyles // Apply font styles to all desktop nav items
               }}>
                 <Box sx={{ 
                   display: 'flex', 
@@ -236,7 +255,9 @@ const OutsideNavbar: React.FC<OutsideNavbarProps> = ({ isAuthenticated, onDashbo
                           height: '100%',
                           display: 'flex',
                           alignItems: 'center',
-                          px: 2
+                          px: 2,
+                          fontSize: tabFontSize,
+                          textTransform: 'none'
                         }}
                       >
                         {item.label}
