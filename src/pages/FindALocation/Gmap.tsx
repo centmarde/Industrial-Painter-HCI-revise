@@ -110,7 +110,7 @@ const Gmap: React.FC = () => {
     // Load the Google Maps script if it hasn't been loaded already
     if (!window.google && !isMapInitialized) {
       const script = document.createElement('script');
-      script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyAOVYRIgupAurZup5y1PRh8Ismb1A3lLao&libraries=places&callback=initMap`;
+      script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyBiyf0K2SL3k9iXh7cKB4mB7eo3g4jd39k&libraries=places&callback=initMap`;
       script.async = true;
       script.defer = true;
       document.head.appendChild(script);
